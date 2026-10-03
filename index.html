@@ -64,7 +64,7 @@ const armas=[
 {id:"espada",nome:"Espada de Ferro",emoji:"⚔️",preco:0,dano:10},
 {id:"katana",nome:"Katana Lunar",emoji:"🗡️",preco:900,dano:18},
 {id:"machado",nome:"Machado Flamejante",emoji:"🪓",preco:1500,dano:28}];
-const poderes=[
+const poderesBaseLista=[
 {id:"fogo",nome:"🔥 Fogo",preco:400,dano:35},
 {id:"gelo",nome:"❄️ Gelo",preco:700,dano:50},
 {id:"raio",nome:"⚡ Raio",preco:1100,dano:75}];
@@ -73,7 +73,7 @@ const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,
 function toast(m){$("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2500)}
 function patente(p,n){if(p>=10000||n>=30)return"Lendário";if(p>=6000||n>=20)return"Elite";if(p>=3500||n>=15)return"Mestre";if(p>=2000||n>=10)return"Profissional";if(p>=900||n>=6)return"Avançado";if(p>=300||n>=3)return"Intermediário";return"Iniciante"}
 function base(){return{nome:"Jogador",vida:100,mana:100,pontos:0,moedas:500,nivel:1,patente:"Iniciante",personagem:"Guerreiro",arma:"Espada de Ferro",poder:"🔥 Fogo",inventario:{},atualizadoEm:Date.now()}}
-function mostrar(id){document.querySelectorAll(".panel").forEach(x=>x.classList.add("hidden"));$(id)?.classList.remove("hidden");if(id==="ranking")ranking();if(id==="loja")loja();if(id==="poderes")poderes();if(id==="combate")combate();scrollTo({top:$(id)?.offsetTop-70||0,behavior:"smooth"})}
+function mostrar(id){document.querySelectorAll(".panel").forEach(x=>x.classList.add("hidden"));$(id)?.classList.remove("hidden");if(id==="ranking")ranking();if(id==="loja")loja();if(id==="poderes")renderPoderes();if(id==="combate")combate();scrollTo({top:$(id)?.offsetTop-70||0,behavior:"smooth"})}
 window.mostrar=mostrar;
 function ui(){$("playerName").textContent=jogador.nome;$("uid").textContent=usuario.uid;$("vida").textContent=jogador.vida;$("mana").textContent=jogador.mana;$("pontos").textContent=jogador.pontos;$("moedas").textContent=jogador.moedas;jogador.patente=patente(jogador.pontos,jogador.nivel);$("patente").textContent=jogador.patente;$("nomeInput").value=jogador.nome}
 async function save(silent=false){jogador.patente=patente(jogador.pontos,jogador.nivel);const u={};u["jogadores/"+usuario.uid]=jogador;u["ranking/"+usuario.uid]={uid:usuario.uid,nome:jogador.nome,pontos:jogador.pontos,nivel:jogador.nivel,patente:jogador.patente,personagem:jogador.personagem,atualizadoEm:Date.now()};try{await update(ref(db),u);ui();if(!silent)toast("✅ Salvo!")}catch(e){toast("❌ Erro ao salvar.")}}
@@ -90,10 +90,10 @@ async function carregar(){
 window.novoJogo=async()=>{if(confirm("Começar um novo jogo?")){jogador=base();await save()}};
 window.salvarNome=async()=>{const n=$("nomeInput").value.trim(),s=n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");if(n.length<3||n.length>18)return toast("❌ Nome deve ter 3-18 caracteres.");if(!/^[\p{L}\p{N}_ -]+$/u.test(n))return toast("❌ Caracteres não permitidos.");if(proibidos.some(x=>s.includes(x)))return toast("🚫 Nome proibido.");jogador.nome=n;await save()};
 function loja(){const arr=[...personagens.map(x=>[x,"personagem"]),...(window.personagensExtra||[]).map(x=>[x,"personagem"]),...armas.map(x=>[x,"arma"]),...(window.armasExtra||[]).map(x=>[x,"arma"])];$("lojaGrid").innerHTML=arr.map(([x,t])=>card(x,t)).join("")}
-function poderes(){ $("poderGrid").innerHTML=[...poderesBase(),...(window.poderesExtra||[])].map(x=>card(x,"poder")).join("")}
-function poderesBase(){return poderes}
+function renderPoderes(){ $("poderGrid").innerHTML=[...poderesBase(),...(window.poderesExtra||[])].map(x=>card(x,"poder")).join("")}
+function poderesBase(){return poderesBaseLista}
 function card(x,t){const owned=(t==="personagem"&&jogador.personagem===x.nome)||(t==="arma"&&jogador.arma===x.nome)||(t==="poder"&&jogador.poder===x.nome);return`<div class="card"><div class="emoji">${x.emoji}</div><h3>${esc(x.nome)}</h3><p>${esc(x.desc||"Melhore seu poder.")}</p>${x.dano?`<p>⚔️ Dano: ${x.dano}</p>`:""}<p class="price">🪙 ${x.preco||0}</p><button class="btn ${owned?"green":"gold"}" onclick='comprar(${JSON.stringify(x)},"${t}")'>${owned?"✅ EQUIPADO":"🛒 COMPRAR"}</button></div>`}
-window.comprar=async(x,t)=>{if((t==="personagem"&&jogador.personagem===x.nome)||(t==="arma"&&jogador.arma===x.nome)||(t==="poder"&&jogador.poder===x.nome))return toast("Já equipado.");if(jogador.moedas<x.preco)return toast("❌ Moedas insuficientes.");jogador.moedas-=x.preco;if(t==="personagem")jogador.personagem=x.nome;if(t==="arma")jogador.arma=x.nome;if(t==="poder")jogador.poder=x.nome;await save(true);toast("🛒 Equipado!");loja();poderes();ui()}
+window.comprar=async(x,t)=>{if((t==="personagem"&&jogador.personagem===x.nome)||(t==="arma"&&jogador.arma===x.nome)||(t==="poder"&&jogador.poder===x.nome))return toast("Já equipado.");if(jogador.moedas<x.preco)return toast("❌ Moedas insuficientes.");jogador.moedas-=x.preco;if(t==="personagem")jogador.personagem=x.nome;if(t==="arma")jogador.arma=x.nome;if(t==="poder")jogador.poder=x.nome;await save(true);toast("🛒 Equipado!");loja();renderPoderes();ui()}
 function combate(){ $("enemyGrid").innerHTML=inimigos.map((e,i)=>{const hp=Number(sessionStorage.getItem("hp_"+e.id)??e.vida);return`<div class="enemy ${alvo===i?"selected":""}" onclick="selecionar(${i})"><div class="emoji">${e.emoji}</div><h3>${e.nome}</h3><p>❤️ ${hp}/${e.vida}</p><div class="hp"><i style="width:${hp/e.vida*100}%"></i></div><p>⚔️ ${e.dano} • ⭐ ${e.pontos} • 🪙 ${e.moedas}</p></div>`}).join("")}
 window.selecionar=i=>{alvo=i;combate();toast("🎯 "+inimigos[i].nome)}
 function dano(){
@@ -102,7 +102,7 @@ function dano(){
  return arma+pers+jogador.nivel;
 }
 window.atacar=async()=>{const e=inimigos[alvo],k="hp_"+e.id;let hp=Math.max(0,Number(sessionStorage.getItem(k)??e.vida)-dano());sessionStorage.setItem(k,hp);if(hp===0){jogador.pontos+=e.pontos;jogador.moedas+=e.moedas;sessionStorage.removeItem(k);$("combatLog").textContent=`🏆 ${e.nome} derrotado! +${e.pontos} pontos e +${e.moedas} moedas.`}else{jogador.vida-=e.dano;if(jogador.vida<=0)jogador.vida=100;$("combatLog").textContent=`⚔️ Ataque realizado!`;}jogador.nivel=Math.max(1,1+Math.floor(jogador.pontos/300));await save(true);ui();combate()}
-window.usarPoder=async()=>{const p=poderes.find(x=>x.nome===jogador.poder)||poderes[0],e=inimigos[alvo],k="hp_"+e.id;let hp=Math.max(0,Number(sessionStorage.getItem(k)??e.vida)-p.dano);sessionStorage.setItem(k,hp);jogador.mana=Math.max(0,jogador.mana-15);if(hp===0){jogador.pontos+=e.pontos;jogador.moedas+=e.moedas;sessionStorage.removeItem(k)}$("combatLog").textContent=`🔥 Poder causou ${p.dano} de dano.`;await save(true);ui();combate()}
+window.usarPoder=async()=>{const p=poderesBaseLista.find(x=>x.nome===jogador.poder)||poderesBaseLista[0],e=inimigos[alvo],k="hp_"+e.id;let hp=Math.max(0,Number(sessionStorage.getItem(k)??e.vida)-p.dano);sessionStorage.setItem(k,hp);jogador.mana=Math.max(0,jogador.mana-15);if(hp===0){jogador.pontos+=e.pontos;jogador.moedas+=e.moedas;sessionStorage.removeItem(k)}$("combatLog").textContent=`🔥 Poder causou ${p.dano} de dano.`;await save(true);ui();combate()}
 async function ranking(){const s=await get(ref(db,"ranking"));if(!s.exists())return $("rankingList").innerHTML="<p>Nenhum jogador.</p>";let a=[];s.forEach(c=>a.push(c.val()));a.sort((x,y)=>(y.pontos||0)-(x.pontos||0));$("rankingList").innerHTML=a.map((p,i)=>`<div class="rank-row"><div>${i<3?["🥇","🥈","🥉"][i]:"#"+(i+1)}</div><div><b>${esc(p.nome)}</b><br><span class="badge">${esc(p.patente||"Iniciante")}</span> Nível ${p.nivel||1}</div><div class="rank-points">⭐ ${p.pontos||0}</div></div>`).join("")}
 window.ranking=ranking;
 let catalogo=[];
@@ -115,7 +115,7 @@ async function carregarCatalogo(){
    const armasExtra=catalogo.filter(x=>x.tipo==="arma").map(x=>({...x,dano:Number(x.dano||0)}));
    const poderesExtra=catalogo.filter(x=>x.tipo==="poder").map(x=>({...x,dano:Number(x.dano||0)}));
    window.personagensExtra=personagensExtra;window.armasExtra=armasExtra;window.poderesExtra=poderesExtra;
-   loja();poderes();
+   loja();renderPoderes();
  }catch(e){catalogo=[]}
 }
 window.recompensa=async()=>{const d=new Date().toISOString().slice(0,10);if(jogador.recompensa===d)return toast("🎁 Já resgatada hoje.");jogador.recompensa=d;jogador.moedas+=100;jogador.pontos+=25;await save(true);toast("🎁 +100 moedas e +25 pontos!")};

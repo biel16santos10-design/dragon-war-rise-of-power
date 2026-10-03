@@ -1,13 +1,26 @@
 {
-  "background_color": "#ffffff",
-  "dir": "ltr",
-  "display": "standalone",
   "name": "Dragon War: Rise of Power",
-  "orientation": "any",
-  "scope": "/",
   "short_name": "Dragon War",
-  "start_url": "/",
-  "theme_color": "#ffffff",
   "id": "dragon-war-rise-of-power",
-  "description": "Dragon War: Rise of Power é um jogo de aventura e batalha com personagens, armas, poderes, dragões e ranking global."
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05070b",
+  "theme_color": "#7c3aed",
+  "description": "Dragon War: Rise of Power é um jogo de aventura e batalha com personagens, armas, poderes, dragões e ranking global.",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

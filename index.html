@@ -1,3580 +1,459 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="manifest" href="./manifest.json">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#7c3aed">
-
 <title>Dragon War: Rise of Power</title>
-
 <style>
-
-*{
-  box-sizing:border-box;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#05070b;
-  color:#fff;
-}
-
-body{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top,#24104f 0,#0b0715 35%,#05070b 75%);
-}
-
-button{
-  font-family:inherit;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* =========================
-   TELA INICIAL
-========================= */
-
-#inicio{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-.logo-box{
-  width:min(700px,100%);
-  text-align:center;
-  padding:35px 20px;
-  border:2px solid #7c3aed;
-  border-radius:25px;
-  background:rgba(10,8,20,.92);
-  box-shadow:
-    0 0 30px rgba(124,58,237,.35),
-    inset 0 0 30px rgba(124,58,237,.08);
-}
-
-.logo-dragon{
-  font-size:90px;
-  margin-bottom:5px;
-  filter:drop-shadow(0 0 18px #ff4500);
-}
-
-.logo-box h1{
-  margin:10px 0;
-  font-size:clamp(30px,6vw,55px);
-  color:#ffd166;
-  text-shadow:
-    0 0 10px #ff4500,
-    0 0 25px #7c3aed;
-}
-
-.subtitulo{
-  color:#aaa;
-  font-size:16px;
-  margin-bottom:25px;
-}
-
-.nome-dono{
-  font-weight:bold;
-  font-size:20px;
-  background:linear-gradient(
-    90deg,
-    #ff3b30,
-    #ff9500,
-    #ffe600,
-    #34c759,
-    #00c7ff,
-    #5856d6,
-    #ff2d55
-  );
-  background-size:500% 500%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  animation:rainbow 4s linear infinite;
-}
-
-@keyframes rainbow{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
-.nome-normal{
-  color:#fff;
-  font-weight:bold;
-}
-
-.versao{
-  color:#777;
-  font-size:13px;
-  margin-top:20px;
-}
-
-.atualizacao{
-  margin:20px auto;
-  max-width:550px;
-  padding:15px;
-  border-radius:15px;
-  border:1px solid #37206c;
-  background:rgba(124,58,237,.08);
-  color:#ccc;
-}
-
-/* =========================
-   BOTÕES
-========================= */
-
-.btn{
-  border:none;
-  border-radius:12px;
-  padding:13px 18px;
-  margin:5px;
-  cursor:pointer;
-  font-size:15px;
-  font-weight:bold;
-  color:#fff;
-  background:linear-gradient(135deg,#7c3aed,#4c1d95);
-  box-shadow:0 5px 15px rgba(0,0,0,.3);
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.15);
-}
-
-.btn:active{
-  transform:scale(.97);
-}
-
-.btn-verde{
-  background:linear-gradient(135deg,#16a34a,#065f46);
-}
-
-.btn-vermelho{
-  background:linear-gradient(135deg,#dc2626,#7f1d1d);
-}
-
-.btn-amarelo{
-  background:linear-gradient(135deg,#f59e0b,#92400e);
-}
-
-.btn-azul{
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);
-}
-
-.btn-cinza{
-  background:#27272a;
-}
-
-.btn-grande{
-  padding:17px 45px;
-  font-size:20px;
-}
-
-/* =========================
-   JOGO
-========================= */
-
-#jogo{
-  max-width:1200px;
-  margin:auto;
-  padding:15px;
-}
-
-.topo{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:15px;
-}
-
-.titulo-jogo{
-  font-size:25px;
-  font-weight:bold;
-  color:#ffd166;
-}
-
-.player-top{
-  padding:10px 15px;
-  border-radius:12px;
-  background:#111827;
-  border:1px solid #292c39;
-}
-
-.status{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:10px;
-  margin-bottom:15px;
-}
-
-.stat{
-  background:rgba(17,24,39,.9);
-  border:1px solid #292c39;
-  border-radius:15px;
-  padding:13px;
-  text-align:center;
-}
-
-.stat strong{
-  display:block;
-  color:#aaa;
-  font-size:12px;
-  margin-bottom:5px;
-}
-
-.stat span{
-  font-size:20px;
-  font-weight:bold;
-}
-
-.menu{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.menu .btn{
-  margin:0;
-  min-height:50px;
-}
-
-.painel{
-  background:rgba(10,12,20,.94);
-  border:1px solid #2c3150;
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-
-.painel h2{
-  margin-top:0;
-  color:#c4b5fd;
-}
-
-.info{
-  background:#111827;
-  padding:12px;
-  border-radius:10px;
-  color:#aaa;
-  margin-bottom:12px;
-}
-
-input,select{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #3f3f46;
-  background:#09090b;
-  color:#fff;
-  outline:none;
-  margin:5px 0 10px;
-}
-
-input:focus,select:focus{
-  border-color:#7c3aed;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-.card{
-  background:#111827;
-  border:1px solid #30364d;
-  border-radius:16px;
-  padding:17px;
-  text-align:center;
-}
-
-.card h3{
-  margin-top:5px;
-  color:#ffd166;
-}
-
-.card p{
-  color:#aaa;
-  font-size:14px;
-}
-
-.card .emoji{
-  font-size:55px;
-}
-
-.card .btn{
-  width:100%;
-  margin:5px 0;
-}
-
-/* =========================
-   INIMIGOS
-========================= */
-
-.inimigos{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-}
-
-.inimigo{
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(80,20,20,.4),
-      rgba(17,24,39,.95)
-    );
-  border:2px solid #431f2a;
-  border-radius:18px;
-  padding:20px;
-  text-align:center;
-}
-
-.inimigo:hover{
-  border-color:#ef4444;
-}
-
-.inimigo .emoji{
-  font-size:70px;
-}
-
-.vida-inimigo{
-  height:13px;
-  background:#27272a;
-  border-radius:20px;
-  overflow:hidden;
-  margin:10px 0;
-}
-
-.vida-inimigo-barra{
-  height:100%;
-  width:100%;
-  background:linear-gradient(90deg,#ef4444,#f97316);
-  transition:.3s;
-}
-
-.batalha{
-  max-width:600px;
-  margin:auto;
-  text-align:center;
-}
-
-.log{
-  background:#050505;
-  border:1px solid #27272a;
-  border-radius:12px;
-  padding:15px;
-  min-height:100px;
-  max-height:250px;
-  overflow:auto;
-  text-align:left;
-  margin-top:15px;
-}
-
-.log div{
-  margin:5px 0;
-  color:#ccc;
-}
-
-/* =========================
-   RANKING
-========================= */
-
-.ranking-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.ranking-item{
-  display:grid;
-  grid-template-columns:50px 1fr auto;
-  gap:10px;
-  align-items:center;
-  background:#111827;
-  border:1px solid #292c39;
-  border-radius:12px;
-  padding:12px;
-}
-
-.posicao{
-  font-size:22px;
-  font-weight:bold;
-  color:#ffd166;
-}
-
-.pontos-ranking{
-  color:#aaa;
-  font-size:13px;
-}
-
-/* =========================
-   ADMIN
-========================= */
-
-.admin-card{
-  background:#0c1220;
-  border:1px solid #374151;
-  border-radius:15px;
-  padding:15px;
-  margin:10px 0;
-}
-
-.admin-card-top{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-}
-
-.admin-acoes{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-}
-
-.admin-acoes .btn{
-  margin:0;
-  padding:9px 12px;
-  font-size:12px;
-}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:bold;
-  margin-left:5px;
-}
-
-.badge-admin{
-  background:#7c3aed;
-}
-
-.badge-bloqueado{
-  background:#dc2626;
-}
-
-.badge-online{
-  background:#16a34a;
-}
-
-textarea{
-  width:100%;
-  min-height:180px;
-  background:#050505;
-  color:#ddd;
-  border:1px solid #333;
-  border-radius:10px;
-  padding:10px;
-}
-
-/* =========================
-   MENSAGEM
-========================= */
-
-#mensagem{
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translateX(-50%);
-  width:min(90%,600px);
-  padding:14px 18px;
-  border-radius:13px;
-  background:#111827;
-  border:1px solid #7c3aed;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
-  text-align:center;
-  z-index:9999;
-  display:none;
-}
-
-#mensagem.mostrar{
-  display:block;
-}
-
-/* =========================
-   RESPONSIVO
-========================= */
-
-@media(max-width:600px){
-
-  .logo-box{
-    padding:25px 12px;
-  }
-
-  .logo-dragon{
-    font-size:65px;
-  }
-
-  .titulo-jogo{
-    font-size:20px;
-  }
-
-  .status{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .ranking-item{
-    grid-template-columns:40px 1fr;
-  }
-
-  .ranking-item > div:last-child{
-    grid-column:2;
-  }
-
-}
-
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#18203a,#05070b 65%);color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.wrap{width:min(1100px,96%);margin:auto;padding:14px 0 40px}
+header{background:linear-gradient(135deg,#17152b,#30205e);border:1px solid #714bd6;border-radius:20px;padding:18px;text-align:center;box-shadow:0 12px 35px #0008}
+header h1{margin:0;font-size:clamp(25px,5vw,44px)}
+.sub{opacity:.82;margin-top:7px}
+.status{margin-top:12px;padding:10px;border-radius:12px;background:#0005;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.btn{border:0;border-radius:15px;padding:15px 12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2563eb,#06b6d4);box-shadow:0 7px 16px #0005}
+.btn:hover{filter:brightness(1.08)}
+.btn.red{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+.btn.gold{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.btn.green{background:linear-gradient(135deg,#16a34a,#15803d)}
+.btn.purple{background:linear-gradient(135deg,#7c3aed,#4f46e5)}
+.btn.dark{background:#263246}
+.panel{margin-top:14px;background:#102039dd;border:1px solid #416083;border-radius:20px;padding:18px;box-shadow:0 10px 28px #0005}
+.panel h2{margin-top:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.stat{background:#0004;border:1px solid #ffffff18;border-radius:14px;padding:12px}
+.stat b{display:block;font-size:19px;margin-top:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.card{background:#0b1324;border:1px solid #ffffff1a;border-radius:16px;padding:14px}
+.card h3{margin:0 0 7px}
+.card p{opacity:.84;min-height:38px}
+.small{font-size:13px;opacity:.76}
+.log{background:#050914;border-radius:14px;padding:12px;min-height:85px;white-space:pre-line}
+input,select{width:100%;background:#07101e;color:#fff;border:1px solid #4b6380;border-radius:11px;padding:11px;margin:5px 0}
+.table{overflow:auto}.row{display:grid;grid-template-columns:45px 1.6fr .8fr .8fr 1.2fr;gap:8px;align-items:center;background:#081221;border:1px solid #ffffff12;border-radius:12px;padding:10px;margin:7px 0}.adminrow{grid-template-columns:1fr 1fr 1fr 1fr}
+.name-admin{color:#ffd43b;font-weight:900;text-shadow:0 0 9px #ffb300}
+.name-normal{color:#fff;font-weight:800}
+.medal{font-size:22px}.danger{color:#ff8c8c}.ok{color:#70f0a0}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:18px;z-index:20}
+.modalbox{width:min(560px,100%);max-height:90vh;overflow:auto;background:#101a2c;border:1px solid #6078a0;border-radius:20px;padding:20px}
+.toast{position:fixed;right:15px;bottom:15px;background:#101827;border:1px solid #5d77a2;padding:13px 16px;border-radius:13px;z-index:30;box-shadow:0 8px 25px #0008}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:38px 1fr .7fr}.row>*:nth-child(n+4){display:none}}
 </style>
 </head>
-
 <body>
+<div class="wrap">
+<header>
+  <h1>🔥 Dragon War: Rise of Power 🔥</h1>
+  <div class="sub">🎮 Desenvolvido por Gabriel Cabral</div>
+  <div id="status" class="status">⏳ Conectando ao Firebase...</div>
+</header>
 
-<!-- =====================================
-     TELA INICIAL
-===================================== -->
-
-<section id="inicio">
-
-  <div class="logo-box">
-
-    <div class="logo-dragon">🐉</div>
-
-    <h1>Dragon War: Rise of Power</h1>
-
-    <p class="subtitulo">
-      ⚔️ Entre na batalha. Evolua. Derrote os inimigos. Domine o ranking.
-    </p>
-
-    <p>
-      🎮 Desenvolvido por
-      <span class="nome-dono">Gabriel Cabral</span>
-    </p>
-
-    <div class="atualizacao">
-      <strong>🔥 Atualização</strong><br>
-      3 inimigos, loja reformulada, personagens, poderes,
-      ranking global e painel administrativo.
-    </div>
-
-    <button class="btn btn-grande" onclick="iniciarJogo()">
-      ▶ JOGAR
-    </button>
-
-    <div class="versao">
-      Versão 3.0.0
-    </div>
-
+<section id="start" class="panel">
+  <h2>⚔️ Bem-vindo!</h2>
+  <p>Escolha seu nome, carregue seu progresso ou comece um novo jogo.</p>
+  <input id="nomeInput" maxlength="24" placeholder="Seu nome">
+  <div class="grid">
+    <button class="btn green" onclick="novoJogo()">🆕 Novo Jogo</button>
+    <button class="btn" onclick="carregar()">📂 Carregar</button>
+    <button class="btn purple" onclick="abrirNome()">👤 Meu Nome</button>
   </div>
-
+  <div id="startInfo" class="small" style="margin-top:12px"></div>
 </section>
 
-
-<!-- =====================================
-     JOGO
-===================================== -->
-
-<section id="jogo" class="hidden">
-
-  <div class="topo">
-
-    <div class="titulo-jogo">
-      🐉 Dragon War
-    </div>
-
-    <div class="player-top">
-      Jogador:
-      <span id="nomeTopo"></span>
-    </div>
-
+<section id="game" class="hidden">
+  <div class="grid">
+    <button class="btn" onclick="mostrar('aventura')">📖 Aventura</button>
+    <button class="btn gold" onclick="mostrar('loja')">🛒 Loja</button>
+    <button class="btn red" onclick="mostrar('combate')">⚔️ Combate</button>
+    <button class="btn dark" onclick="carregar()">📂 Carregar</button>
+    <button class="btn red" onclick="novoJogo()">🔄 Novo Jogo</button>
+    <button class="btn purple" onclick="abrirNome()">👤 Meu Nome</button>
+    <button class="btn" onclick="mostrar('ranking');carregarRanking()">🏆 Ranking</button>
+    <button id="adminBtn" class="btn gold hidden" onclick="mostrar('admin');carregarAdmin()">🛡️ Painel ADM</button>
   </div>
 
-
-  <!-- STATUS -->
-
-  <div class="status">
-
-    <div class="stat">
-      <strong>❤️ VIDA</strong>
-      <span id="vida"></span>
-    </div>
-
-    <div class="stat">
-      <strong>💧 MANA</strong>
-      <span id="mana"></span>
-    </div>
-
-    <div class="stat">
-      <strong>⭐ PONTOS</strong>
-      <span id="pontos"></span>
-    </div>
-
-    <div class="stat">
-      <strong>🪙 MOEDAS</strong>
-      <span id="moedas"></span>
-    </div>
-
-    <div class="stat">
-      <strong>📈 NÍVEL</strong>
-      <span id="nivel"></span>
-    </div>
-
-    <div class="stat">
-      <strong>⚔️ ARMA</strong>
-      <span id="arma"></span>
-    </div>
-
-    <div class="stat">
-      <strong>🧙 PERSONAGEM</strong>
-      <span id="personagem"></span>
-    </div>
-
-    <div class="stat">
-      <strong>✨ PODER</strong>
-      <span id="poder"></span>
-    </div>
-
-  </div>
-
-
-  <!-- MENU -->
-
-  <div class="menu">
-
-    <button class="btn btn-azul" onclick="abrirTela('aventura')">
-      🗺️ Aventura
-    </button>
-
-    <button class="btn btn-amarelo" onclick="abrirTela('loja')">
-      🛒 Loja
-    </button>
-
-    <button class="btn btn-vermelho" onclick="abrirTela('combate')">
-      ⚔️ Combate
-    </button>
-
-    <button class="btn" onclick="abrirTela('ranking')">
-      🏆 Ranking Global
-    </button>
-
-    <button class="btn" onclick="abrirTela('personagemTela')">
-      🧙 Personagem
-    </button>
-
-    <button class="btn btn-verde" onclick="salvarJogo()">
-      💾 Salvar
-    </button>
-
-    <button class="btn btn-cinza" onclick="carregarJogo()">
-      📂 Carregar
-    </button>
-
-    <button class="btn btn-vermelho" onclick="novoJogo()">
-      🔄 Novo Jogo
-    </button>
-
-    <button class="btn btn-cinza" onclick="abrirTela('nomeTela')">
-      👤 Meu Nome
-    </button>
-
-    <button
-      id="botaoAdmin"
-      class="btn"
-      onclick="abrirAdmin()"
-      style="display:none">
-      👑 Painel ADM
-    </button>
-
-    <button class="btn btn-cinza" onclick="telaInicial()">
-      🏠 Tela Inicial
-    </button>
-
-  </div>
-
-
-  <!-- =====================================
-       AVENTURA
-  ===================================== -->
-
-  <div id="aventura" class="painel hidden">
-
-    <h2>🗺️ Aventura</h2>
-
-    <div class="info">
-      Explore o mundo de Dragon War e prepare-se para enfrentar
-      inimigos cada vez mais fortes.
-    </div>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="emoji">🌲</div>
-        <h3>Floresta Sombria</h3>
-        <p>Uma floresta cheia de criaturas perigosas.</p>
-        <button class="btn" onclick="ganharAventura(1)">
-          Explorar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🏰</div>
-        <h3>Castelo Demoníaco</h3>
-        <p>O território dos guerreiros demoníacos.</p>
-        <button class="btn" onclick="ganharAventura(2)">
-          Invadir
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🌋</div>
-        <h3>Montanha do Dragão</h3>
-        <p>Onde os maiores monstros aguardam.</p>
-        <button class="btn" onclick="ganharAventura(3)">
-          Avançar
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       LOJA
-  ===================================== -->
-
-  <div id="loja" class="painel hidden">
-
-    <h2>🛒 Loja</h2>
-
-    <div class="info">
-      🪙 Suas moedas:
-      <strong id="moedasLoja"></strong>
-    </div>
-
-    <h3>🧙 Personagens</h3>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="emoji">⚔️</div>
-        <h3>Guerreiro</h3>
-        <p>Personagem inicial.</p>
-        <p>Preço: Grátis</p>
-        <button class="btn" onclick="comprarPersonagem('Guerreiro',0)">
-          Usar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🧙</div>
-        <h3>Mago</h3>
-        <p>Especialista em magia.</p>
-        <p>Preço: 300 moedas</p>
-        <button class="btn" onclick="comprarPersonagem('Mago',300)">
-          Comprar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🥷</div>
-        <h3>Ninja</h3>
-        <p>Rápido e mortal.</p>
-        <p>Preço: 600 moedas</p>
-        <button class="btn" onclick="comprarPersonagem('Ninja',600)">
-          Comprar
-        </button>
-      </div>
-
-    </div>
-
-
-    <h3>✨ Poderes</h3>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="emoji">🔥</div>
-        <h3>Fogo do Dragão</h3>
-        <p>Dano: +20</p>
-        <p>Preço: 250 moedas</p>
-        <button class="btn" onclick="comprarPoder('Fogo do Dragão',250,20)">
-          Comprar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">⚡</div>
-        <h3>Raio Divino</h3>
-        <p>Dano: +40</p>
-        <p>Preço: 450 moedas</p>
-        <button class="btn" onclick="comprarPoder('Raio Divino',450,40)">
-          Comprar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">💥</div>
-        <h3>Explosão Cósmica</h3>
-        <p>Dano: +70</p>
-        <p>Preço: 800 moedas</p>
-        <button class="btn" onclick="comprarPoder('Explosão Cósmica',800,70)">
-          Comprar
-        </button>
-      </div>
-
-    </div>
-
-
-    <h3>⚔️ Armas</h3>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="emoji">🗡️</div>
-        <h3>Espada de Ferro</h3>
-        <p>Dano: +10</p>
-        <p>Preço: 100 moedas</p>
-        <button class="btn" onclick="comprarArma('Espada de Ferro',100,10)">
-          Comprar
-        </button>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🔥</div>
-        <h3>Lâmina do Dragão</h3>
-        <p>Dano: +35</p>
-        <p>Preço: 500 moedas</p>
-        <button class="btn" onclick="comprarArma('Lâmina do Dragão',500,35)">
-          Comprar
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       COMBATE
-  ===================================== -->
-
-  <div id="combate" class="painel hidden">
-
-    <h2>⚔️ Campo de Batalha</h2>
-
-    <div class="info">
-      Escolha um dos três inimigos para lutar.
-    </div>
-
-    <div class="inimigos">
-
-      <!-- INIMIGO 1 -->
-
-      <div class="inimigo">
-
-        <div class="emoji">👺</div>
-
-        <h3>Goblin</h3>
-
-        <p>Nível 1</p>
-
-        <p>❤️ Vida: 100</p>
-
-        <p>💰 Recompensa: 80 moedas</p>
-
-        <button class="btn btn-vermelho"
-                onclick="iniciarCombate('goblin')">
-          ⚔️ Lutar
-        </button>
-
-      </div>
-
-
-      <!-- INIMIGO 2 -->
-
-      <div class="inimigo">
-
-        <div class="emoji">👹</div>
-
-        <h3>Demônio</h3>
-
-        <p>Nível 5</p>
-
-        <p>❤️ Vida: 250</p>
-
-        <p>💰 Recompensa: 200 moedas</p>
-
-        <button class="btn btn-vermelho"
-                onclick="iniciarCombate('demonio')">
-          ⚔️ Lutar
-        </button>
-
-      </div>
-
-
-      <!-- INIMIGO 3 -->
-
-      <div class="inimigo">
-
-        <div class="emoji">🐉</div>
-
-        <h3>Dragão Sombrio</h3>
-
-        <p>Nível 10</p>
-
-        <p>❤️ Vida: 500</p>
-
-        <p>💰 Recompensa: 500 moedas</p>
-
-        <button class="btn btn-vermelho"
-                onclick="iniciarCombate('dragao')">
-          ⚔️ Lutar
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div id="batalhaAtual" class="batalha hidden">
-
-      <hr>
-
-      <h2 id="nomeInimigo"></h2>
-
-      <div class="emoji" id="emojiInimigo" style="font-size:80px"></div>
-
-      <p>
-        ❤️ Vida do inimigo:
-        <strong id="vidaInimigoTexto"></strong>
-      </p>
-
-      <div class="vida-inimigo">
-        <div
-          id="barraVidaInimigo"
-          class="vida-inimigo-barra">
-        </div>
-      </div>
-
-      <p>
-        ❤️ Sua vida:
-        <strong id="vidaJogadorBatalha"></strong>
-      </p>
-
-      <button class="btn btn-vermelho"
-              onclick="atacarInimigo()">
-        ⚔️ ATACAR
-      </button>
-
-      <button class="btn btn-amarelo"
-              onclick="usarPoderCombate()">
-        ✨ USAR PODER
-      </button>
-
-      <button class="btn btn-cinza"
-              onclick="fugirCombate()">
-        🏃 Fugir
-      </button>
-
-      <div id="logBatalha" class="log"></div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       RANKING
-  ===================================== -->
-
-  <div id="ranking" class="painel hidden">
-
-    <h2>🏆 Ranking Global</h2>
-
-    <div class="info">
-      Os nomes são individuais. Somente o ADM recebe o nome colorido.
-    </div>
-
-    <button class="btn" onclick="carregarRanking()">
-      🔄 Atualizar Ranking
-    </button>
-
-    <div id="listaRanking" class="ranking-list">
-      Carregando...
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       PERSONAGEM
-  ===================================== -->
-
-  <div id="personagemTela" class="painel hidden">
-
-    <h2>🧙 Meu Personagem</h2>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="emoji">🧙</div>
-        <h3 id="personagemGrande"></h3>
-        <p>Seu personagem atual.</p>
-      </div>
-
-      <div class="card">
-        <div class="emoji">⚔️</div>
-        <h3 id="armaGrande"></h3>
-        <p>Sua arma atual.</p>
-      </div>
-
-      <div class="card">
-        <div class="emoji">✨</div>
-        <h3 id="poderGrande"></h3>
-        <p>Seu poder atual.</p>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       NOME
-  ===================================== -->
-
-  <div id="nomeTela" class="painel hidden">
-
-    <h2>👤 Meu Nome</h2>
-
-    <div class="info">
-      Escolha o nome que aparecerá no ranking.
-    </div>
-
-    <input
-      id="inputNome"
-      maxlength="20"
-      placeholder="Digite seu nome">
-
-    <button class="btn btn-verde"
-            onclick="salvarNome()">
-      💾 Salvar Nome
-    </button>
-
-  </div>
-
-
-  <!-- =====================================
-       ADMIN
-  ===================================== -->
-
-  <div id="admin" class="painel hidden">
-
-    <h2>👑 Painel Administrativo</h2>
-
-    <div class="info">
-      Área exclusiva do administrador.
-    </div>
-
-    <div class="info">
-      Seu UID:
-      <br>
-      <strong id="uidAdmin"></strong>
-    </div>
-
-    <input
-      id="pesquisaAdmin"
-      placeholder="🔎 Pesquisar por nome ou UID"
-      oninput="filtrarAdmin()">
-
-    <button class="btn"
-            onclick="carregarJogadoresAdmin()">
-      🔄 Atualizar Jogadores
-    </button>
-
-    <div id="listaAdmin">
-      Carregando jogadores...
-    </div>
-
-  </div>
-
+  <div id="stats" class="panel"></div>
+  <div id="aventura" class="panel"></div>
+  <div id="loja" class="panel hidden"></div>
+  <div id="combate" class="panel hidden"></div>
+  <div id="ranking" class="panel hidden"></div>
+  <div id="admin" class="panel hidden"></div>
 </section>
-
-
-<!-- =====================================
-     MENSAGEM
-===================================== -->
-
-<div id="mensagem"></div>
-
+</div>
+<div id="modal" class="hidden"></div>
+<div id="toast" class="toast hidden"></div>
 
 <script type="module">
-
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInAnonymously
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  update,
-  remove
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-
-
-/* =====================================
-   FIREBASE
-===================================== */
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getDatabase,ref,set,get,update,remove,onValue} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 const firebaseConfig = {
+  apiKey:"AIzaSyDA_kn3eNRD9P2D6WDCNbUxBKld0i9Sys",
+  authDomain:"dragon-war-rise-of-power.firebaseapp.com",
+  databaseURL:"https://dragon-war-rise-of-power-default-rtdb.firebaseio.com",
+  projectId:"dragon-war-rise-of-power",
+  storageBucket:"dragon-war-rise-of-power.firebasestorage.app",
+  messagingSenderId:"1002858781019",
+  appId:"1:1002858781019:web:6cd6d1b0173ab37c7fe27e",
+  measurementId:"G-PY4TRBXZ8N"
+};
+const ADMIN_UID="w2aAcmul8vYJOR05lGLQThAsiTg2";
 
-  apiKey:
-    "AIzaSyDA_kn3eNRD9P2D6WDCNbUxBKld0i9Sys",
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getDatabase(app);
+let usuarioFirebase=null;
+let pronto=false;
+let jogador=null;
+let inimigoAtual=null;
+let unsubscribeRanking=null;
 
-  authDomain:
-    "dragon-war-rise-of-power.firebaseapp.com",
+const $=id=>document.getElementById(id);
+const escapar=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const admin=()=>usuarioFirebase?.uid===ADMIN_UID;
+const nomeHTML=(uid,nome)=>uid===ADMIN_UID?`<span class="name-admin">${escapar(nome||"ADM")}</span>`:`<span class="name-normal">${escapar(nome||"Jogador")}</span>`;
+const aviso=(t)=>{ $("toast").textContent=t; $("toast").classList.remove("hidden"); setTimeout(()=>$("toast").classList.add("hidden"),2500); };
 
-  databaseURL:
-    "https://dragon-war-rise-of-power-default-rtdb.firebaseio.com",
+const inimigos=[
+ {id:"goblin",nome:"Goblin",vida:100,ataque:8,pontos:50,moedas:80},
+ {id:"demonio",nome:"Demônio",vida:250,ataque:18,pontos:120,moedas:200},
+ {id:"dragao",nome:"Dragão Sombrio",vida:500,ataque:30,pontos:300,moedas:500}
+];
 
-  projectId:
-    "dragon-war-rise-of-power",
+const personagens=[
+ {id:"Guerreiro",preco:0,vida:140,mana:70,poder:12,desc:"Equilibrado e resistente."},
+ {id:"Mago",preco:500,vida:90,mana:150,poder:18,desc:"Mais mana e magia."},
+ {id:"Ninja",preco:800,vida:110,mana:100,poder:20,desc:"Ataques rápidos e fortes."}
+];
 
-  storageBucket:
-    "dragon-war-rise-of-power.firebasestorage.app",
+const poderes=[
+ {id:"Cura",preco:250,desc:"Recupera 40 de vida."},
+ {id:"Bola de Fogo",preco:400,desc:"Causa dano extra no combate."},
+ {id:"Raio Sombrio",preco:700,desc:"Causa um grande dano extra."}
+];
 
-  messagingSenderId:
-    "1002858781019",
+const armas=[
+ {id:"Espada de Ferro",preco:0,dano:10},
+ {id:"Espada Flamejante",preco:600,dano:22},
+ {id:"Lâmina do Dragão",preco:1200,dano:40}
+];
 
-  appId:
-    "1:1002858781019:web:6cd6d1b0173ab37c7fe27e",
+function jogadorPadrao(nome="Jogador"){
+ return {nome,pontos:0,moedas:300,nivel:1,vida:100,mana:80,personagem:"Guerreiro",arma:"Espada de Ferro",poderes:[]};
+}
 
-  measurementId:
-    "G-PY4TRBXZ8N"
+function mostrar(id){
+ ["aventura","loja","combate","ranking","admin"].forEach(x=>$(x).classList.add("hidden"));
+ $(id).classList.remove("hidden");
+ if(id==="aventura") renderAventura();
+ if(id==="loja") renderLoja();
+ if(id==="combate") renderCombate();
+ if(id==="ranking") carregarRanking();
+ if(id==="admin") carregarAdmin();
+}
 
+function renderStats(){
+ if(!jogador)return;
+ const pers=personagens.find(x=>x.id===jogador.personagem)||personagens[0];
+ const arma=armas.find(x=>x.id===jogador.arma)||armas[0];
+ $("stats").innerHTML=`
+ <h2>📊 ${nomeHTML(usuarioFirebase?.uid,jogador.nome)}</h2>
+ <div class="stats">
+  <div class="stat">❤️ Vida<b>${jogador.vida}</b></div>
+  <div class="stat">🔵 Mana<b>${jogador.mana}</b></div>
+  <div class="stat">⭐ Pontos<b>${jogador.pontos}</b></div>
+  <div class="stat">🪙 Moedas<b>${jogador.moedas}</b></div>
+  <div class="stat">⚔️ Arma<b>${escapar(jogador.arma)}</b></div>
+  <div class="stat">🧙 Personagem<b>${escapar(jogador.personagem)}</b></div>
+  <div class="stat">📈 Nível<b>${jogador.nivel}</b></div>
+  <div class="stat">💥 Poder<b>${pers.poder+arma.dano}</b></div>
+ </div>`;
+}
+
+function renderAventura(){
+ $("aventura").innerHTML=`
+ <h2>📖 Aventura</h2>
+ <p>Explore o mundo, lute contra inimigos e conquiste pontos para subir no ranking.</p>
+ <div class="cards">
+  ${inimigos.map(e=>`<div class="card"><h3>👹 ${e.nome}</h3><p>❤️ ${e.vida} HP • ⚔️ ${e.ataque} ataque<br>🏆 ${e.pontos} pontos • 🪙 ${e.moedas} moedas</p><button class="btn red" onclick="selecionarInimigo('${e.id}')">Lutar</button></div>`).join("")}
+ </div>`;
+}
+
+function renderLoja(){
+ $("loja").innerHTML=`
+ <h2>🛒 Loja</h2>
+ <p>Compre personagens, poderes e armas com suas moedas.</p>
+ <h3>🧙 Personagens</h3>
+ <div class="cards">${personagens.map(p=>`<div class="card"><h3>${p.id}</h3><p>${p.desc}<br>❤️ ${p.vida} • 🔵 ${p.mana} • 💥 ${p.poder}</p><b>🪙 ${p.preco}</b><br><button class="btn green" style="margin-top:8px" onclick="comprarPersonagem('${p.id}')">${jogador.personagem===p.id?"Equipado":"Comprar"}</button></div>`).join("")}</div>
+ <h3>✨ Poderes</h3>
+ <div class="cards">${poderes.map(p=>`<div class="card"><h3>${p.id}</h3><p>${p.desc}</p><b>🪙 ${p.preco}</b><br><button class="btn purple" style="margin-top:8px" onclick="comprarPoder('${p.id}')">Comprar</button></div>`).join("")}</div>
+ <h3>⚔️ Armas</h3>
+ <div class="cards">${armas.map(a=>`<div class="card"><h3>${a.id}</h3><p>Dano +${a.dano}</p><b>🪙 ${a.preco}</b><br><button class="btn gold" style="margin-top:8px" onclick="comprarArma('${a.id}')">${jogador.arma===a.id?"Equipado":"Comprar"}</button></div>`).join("")}</div>`;
+}
+
+function renderCombate(){
+ if(!inimigoAtual){
+  $("combate").innerHTML=`<h2>⚔️ Combate</h2><p>Escolha um inimigo na Aventura.</p>`;
+  return;
+ }
+ $("combate").innerHTML=`
+ <h2>⚔️ Contra ${inimigoAtual.nome}</h2>
+ <div class="card">
+  <p>❤️ Inimigo: <b>${inimigoAtual.vidaAtual}/${inimigoAtual.vida}</b></p>
+  <p>❤️ Sua vida: <b>${jogador.vida}</b> • 🔵 Mana: <b>${jogador.mana}</b></p>
+  <button class="btn red" onclick="atacar()">⚔️ Atacar</button>
+  <button class="btn purple" onclick="usarPoder()">✨ Usar Poder</button>
+  <button class="btn dark" onclick="fugir()">🏃 Fugir</button>
+  <div class="log" id="logCombate" style="margin-top:12px">${escapar(inimigoAtual.log||"O combate começou!")}</div>
+ </div>`;
+}
+
+window.selecionarInimigo=(id)=>{
+ const base=inimigos.find(x=>x.id===id);
+ inimigoAtual={...base,vidaAtual:base.vida,log:`Você encontrou ${base.nome}! Prepare-se!`};
+ mostrar("combate");
 };
 
+function finalizarVitoria(){
+ jogador.pontos+=inimigoAtual.pontos;
+ jogador.moedas+=inimigoAtual.moedas;
+ jogador.nivel=Math.max(1,Math.floor(jogador.pontos/300)+1);
+ jogador.vida=Math.min(160,jogador.vida+20);
+ jogador.mana=Math.min(160,jogador.mana+20);
+ aviso(`🏆 Vitória! +${inimigoAtual.pontos} pontos e +${inimigoAtual.moedas} moedas.`);
+ salvar();
+ inimigoAtual=null;
+ renderStats();
+ renderAventura();
+ mostrar("aventura");
+}
 
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getDatabase(app);
-
-
-/* =====================================
-   CONFIGURAÇÕES
-===================================== */
-
-const ADMIN_UID =
-  "w2aAcmul8vYJOR05lGLQThAsiTg2";
-
-const VERSAO =
-  "3.0.0";
-
-
-/* =====================================
-   ESTADO DO JOGADOR
-===================================== */
-
-let usuarioFirebase = null;
-
-let jogador = {
-
-  nome:"Jogador",
-
-  vida:100,
-
-  vidaMax:100,
-
-  mana:100,
-
-  manaMax:100,
-
-  pontos:0,
-
-  moedas:500,
-
-  nivel:1,
-
-  personagem:"Guerreiro",
-
-  arma:"Nenhuma",
-
-  danoArma:0,
-
-  poder:"Nenhum",
-
-  danoPoder:0,
-
-  bloqueado:false
-
+window.atacar=()=>{
+ if(!inimigoAtual)return;
+ const pers=personagens.find(x=>x.id===jogador.personagem)||personagens[0];
+ const arma=armas.find(x=>x.id===jogador.arma)||armas[0];
+ const dano=pers.poder+arma.dano+Math.floor(Math.random()*8);
+ inimigoAtual.vidaAtual-=dano;
+ if(inimigoAtual.vidaAtual<=0){finalizarVitoria();return;}
+ jogador.vida-=inimigoAtual.ataque;
+ inimigoAtual.log=`⚔️ Você causou ${dano} de dano. ${inimigoAtual.nome} respondeu com ${inimigoAtual.ataque} de dano.`;
+ if(jogador.vida<=0){
+  jogador.vida=1;
+  inimigoAtual.log+="\n💀 Você quase foi derrotado e escapou por pouco!";
+  aviso("💀 Você ficou com 1 de vida.");
+ }
+ renderStats();renderCombate();
 };
 
-
-let inimigoAtual = null;
-
-let batalhaAtiva = false;
-
-
-/* =====================================
-   INIMIGOS
-===================================== */
-
-const INIMIGOS = {
-
-  goblin:{
-    id:"goblin",
-    nome:"Goblin",
-    emoji:"👺",
-    vida:100,
-    vidaMax:100,
-    dano:8,
-    recompensaPontos:50,
-    recompensaMoedas:80
-  },
-
-  demonio:{
-    id:"demonio",
-    nome:"Demônio",
-    emoji:"👹",
-    vida:250,
-    vidaMax:250,
-    dano:18,
-    recompensaPontos:120,
-    recompensaMoedas:200
-  },
-
-  dragao:{
-    id:"dragao",
-    nome:"Dragão Sombrio",
-    emoji:"🐉",
-    vida:500,
-    vidaMax:500,
-    dano:30,
-    recompensaPontos:300,
-    recompensaMoedas:500
-  }
-
+window.usarPoder=()=>{
+ if(!inimigoAtual)return;
+ if(!jogador.poderes.length){aviso("Você ainda não possui poderes.");return;}
+ if(jogador.mana<20){aviso("Mana insuficiente.");return;}
+ const poder=jogador.poderes[jogador.poderes.length-1];
+ const dano=poder==="Raio Sombrio"?90:poder==="Bola de Fogo"?55:0;
+ jogador.mana-=20;
+ if(poder==="Cura"){
+  jogador.vida=Math.min(160,jogador.vida+40);
+  inimigoAtual.log="✨ Você usou Cura e recuperou 40 de vida.";
+ }else{
+  inimigoAtual.vidaAtual-=dano;
+  inimigoAtual.log=`✨ ${poder} causou ${dano} de dano!`;
+  if(inimigoAtual.vidaAtual<=0){finalizarVitoria();return;}
+  jogador.vida-=inimigoAtual.ataque;
+ }
+ renderStats();renderCombate();
 };
 
+window.fugir=()=>{inimigoAtual=null;mostrar("aventura");};
 
-/* =====================================
-   ELEMENTOS
-===================================== */
-
-const $ = id =>
-  document.getElementById(id);
-
-
-/* =====================================
-   MENSAGEM
-===================================== */
-
-function mensagem(texto){
-
-  const box = $("mensagem");
-
-  box.textContent = texto;
-
-  box.classList.add("mostrar");
-
-  setTimeout(()=>{
-    box.classList.remove("mostrar");
-  },3000);
-
+async function salvar(){
+ if(!usuarioFirebase||!jogador)return;
+ const uid=usuarioFirebase.uid;
+ const dados={...jogador,atualizadoEm:Date.now()};
+ const updates={};
+ updates[`jogadores/${uid}`]=dados;
+ updates[`ranking/${uid}`]={uid,nome:jogador.nome,pontos:jogador.pontos,nivel:jogador.nivel,personagem:jogador.personagem,atualizadoEm:Date.now()};
+ try{
+  await update(ref(db),updates);
+  aviso("💾 Progresso salvo!");
+ }catch(e){
+  console.error(e);aviso("❌ Não foi possível salvar.");
+ }
 }
-
-
-/* =====================================
-   ESCAPAR HTML
-===================================== */
-
-function escaparHTML(valor){
-
-  return String(valor ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================
-   VERIFICAR ADM
-===================================== */
-
-function ehAdmin(){
-
-  return !!(
-    usuarioFirebase &&
-    usuarioFirebase.uid === ADMIN_UID
-  );
-
-}
-
-
-/* =====================================
-   NOME DO JOGADOR
-===================================== */
-
-function htmlNomeJogador(uid,nome){
-
-  const nomeSeguro =
-    escaparHTML(nome || "Jogador");
-
-  /*
-     IMPORTANTE:
-
-     NÃO usamos o campo nomeColorido
-     salvo no Firebase para decidir a cor.
-
-     A cor é decidida pelo UID.
-
-     Dessa maneira, jogadores antigos
-     que ficaram com nomeColorido=true
-     não aparecerão coloridos.
-  */
-
-  if(uid === ADMIN_UID){
-
-    return `
-      <span class="nome-dono">
-        ${nomeSeguro}
-      </span>
-    `;
-
-  }
-
-  return `
-    <span class="nome-normal">
-      ${nomeSeguro}
-    </span>
-  `;
-
-}
-
-
-/* =====================================
-   LOGIN ANÔNIMO
-===================================== */
-
-onAuthStateChanged(auth, async user => {
-
-  if(user){
-
-    usuarioFirebase = user;
-
-    $("uidAdmin").textContent =
-      user.uid;
-
-    if(ehAdmin()){
-
-      $("botaoAdmin").style.display =
-        "block";
-
-    }
-
-    await carregarJogador();
-
-  }
-
-});
-
-
-signInAnonymously(auth)
-  .catch(error => {
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao conectar ao Firebase."
-    );
-
-  });
-
-
-/* =====================================
-   CARREGAR JOGADOR
-===================================== */
 
 async function carregarJogador(){
-
-  if(!usuarioFirebase) return;
-
-  try{
-
-    const snap = await get(
-      ref(
-        db,
-        "jogadores/" +
-        usuarioFirebase.uid
-      )
-    );
-
-    if(snap.exists()){
-
-      const dados = snap.val() || {};
-
-      jogador = {
-
-        ...jogador,
-
-        ...dados
-
-      };
-
-    }
-
-    /*
-      O ADM mantém o nome salvo.
-
-      Se for primeira entrada do ADM,
-      usamos Gabriel Cabral como padrão.
-    */
-
-    if(
-      ehAdmin() &&
-      (!jogador.nome ||
-       jogador.nome === "Jogador")
-    ){
-
-      jogador.nome =
-        "Gabriel Cabral";
-
-    }
-
-    atualizarTela();
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Não foi possível carregar seus dados."
-    );
-
-  }
-
+ if(!usuarioFirebase)return;
+ try{
+  const snap=await get(ref(db,`jogadores/${usuarioFirebase.uid}`));
+  if(snap.exists()) jogador={...jogadorPadrao(),...snap.val()};
+  else jogador=jogadorPadrao();
+  $("nomeInput").value=jogador.nome||"";
+  renderStats();
+  pronto=true;
+  $("status").innerHTML=admin()?"🛡️ Conectado como ADM":"🟢 Conectado ao servidor";
+  $("adminBtn").classList.toggle("hidden",!admin());
+  $("game").classList.remove("hidden");
+  renderAventura();
+ }catch(e){
+  console.error(e);
+  $("status").textContent="❌ Erro ao carregar jogador";
+ }
 }
 
+window.novoJogo=async()=>{
+ if(!usuarioFirebase){aviso("⏳ Aguarde a conexão.");return;}
+ const nome=($("nomeInput").value||"").trim()||"Jogador";
+ jogador=jogadorPadrao(nome);
+ inimigoAtual=null;
+ await salvar();
+ renderStats();renderAventura();mostrar("aventura");
+ aviso("🆕 Novo jogo criado!");
+};
 
-/* =====================================
-   ATUALIZAR TELA
-===================================== */
+window.carregar=async()=>{
+ await carregarJogador();
+ if(pronto)mostrar("aventura");
+};
 
-function atualizarTela(){
+window.abrirNome=()=>{
+ $("modal").className="modal";
+ $("modal").innerHTML=`<div class="modalbox"><h2>👤 Alterar nome</h2><input id="novoNome" maxlength="24" value="${escapar(jogador?.nome||"Jogador")}"><button class="btn green" onclick="salvarNome()">Salvar nome</button> <button class="btn dark" onclick="fecharModal()">Cancelar</button></div>`;
+};
 
-  $("vida").textContent =
-    `${jogador.vida}/${jogador.vidaMax}`;
+window.salvarNome=async()=>{
+ const n=($("novoNome").value||"").trim();
+ if(!n){aviso("Digite um nome.");return}
+ jogador.nome=n;
+ $("nomeInput").value=n;
+ await salvar();renderStats();fecharModal();mostrar("aventura");
+};
+window.fecharModal=()=>{$("modal").className="hidden";$("modal").innerHTML=""};
 
-  $("mana").textContent =
-    `${jogador.mana}/${jogador.manaMax}`;
+window.comprarPersonagem=async id=>{
+ const p=personagens.find(x=>x.id===id);
+ if(jogador.personagem===id){aviso("Esse personagem já está equipado.");return}
+ if(jogador.moedas<p.preco){aviso("Moedas insuficientes.");return}
+ jogador.moedas-=p.preco;jogador.personagem=id;
+ jogador.vida=p.vida;jogador.mana=p.mana;
+ await salvar();renderStats();renderLoja();
+};
 
-  $("pontos").textContent =
-    jogador.pontos;
+window.comprarPoder=async id=>{
+ const p=poderes.find(x=>x.id===id);
+ if(jogador.poderes.includes(id)){aviso("Você já possui esse poder.");return}
+ if(jogador.moedas<p.preco){aviso("Moedas insuficientes.");return}
+ jogador.moedas-=p.preco;jogador.poderes.push(id);
+ await salvar();renderStats();renderLoja();
+};
 
-  $("moedas").textContent =
-    jogador.moedas;
+window.comprarArma=async id=>{
+ const a=armas.find(x=>x.id===id);
+ if(jogador.arma===id){aviso("Essa arma já está equipada.");return}
+ if(jogador.moedas<a.preco){aviso("Moedas insuficientes.");return}
+ jogador.moedas-=a.preco;jogador.arma=id;
+ await salvar();renderStats();renderLoja();
+};
 
-  $("nivel").textContent =
-    jogador.nivel;
+window.carregarRanking=async()=>{
+ const box=$("ranking");
+ box.innerHTML=`<h2>🏆 Ranking Global</h2><p>Carregando...</p>`;
+ try{
+  if(!usuarioFirebase){box.innerHTML=`<h2>🏆 Ranking Global</h2><div class="info">⏳ Conectando ao Firebase...</div>`;return}
+  const snap=await get(ref(db,"ranking"));
+  if(!snap.exists()){box.innerHTML=`<h2>🏆 Ranking Global</h2><p>Nenhum jogador ainda.</p>`;return}
+  const arr=[];
+  snap.forEach(c=>{const d=c.val()||{};arr.push({uid:c.key,...d,pontos:Number(d.pontos||0),nivel:Number(d.nivel||1)})});
+  arr.sort((a,b)=>b.pontos-a.pontos);
+  box.innerHTML=`<h2>🏆 Ranking Global</h2><p class="small">Somente o ADM recebe o nome colorido.</p>`+
+    arr.map((p,i)=>`<div class="row"><div class="medal">${i===0?"🥇":i===1?"🥈":i===2?"🥉":"#"+(i+1)}</div><div>${nomeHTML(p.uid,p.nome)}<div class="small">Nível ${p.nivel} • ${escapar(p.personagem||"Guerreiro")}</div></div><div>⭐ ${p.pontos}</div></div>`).join("");
+ }catch(e){
+  console.error(e);
+  box.innerHTML=`<h2>🏆 Ranking Global</h2><div class="danger">❌ Erro: ${escapar(e.message||e)}</div>`;
+ }
+};
 
-  $("arma").textContent =
-    jogador.arma;
-
-  $("personagem").textContent =
-    jogador.personagem;
-
-  $("poder").textContent =
-    jogador.poder;
-
-  $("moedasLoja").textContent =
-    jogador.moedas;
-
-  $("nomeTopo").innerHTML =
-    htmlNomeJogador(
-      usuarioFirebase?.uid,
-      jogador.nome
-    );
-
-  $("inputNome").value =
-    jogador.nome || "";
-
-  $("personagemGrande").textContent =
-    jogador.personagem;
-
-  $("armaGrande").textContent =
-    jogador.arma;
-
-  $("poderGrande").textContent =
-    jogador.poder;
-
-  $("uidAdmin").textContent =
-    usuarioFirebase?.uid || "";
-
+async function carregarAdmin(){
+ if(!admin())return;
+ const box=$("admin");
+ box.innerHTML=`<h2>🛡️ Painel do ADM</h2><p>Carregando jogadores...</p>`;
+ try{
+  const [jSnap,rSnap]=await Promise.all([get(ref(db,"jogadores")),get(ref(db,"ranking"))]);
+  const mapa={};
+  if(jSnap.exists())jSnap.forEach(c=>mapa[c.key]={uid:c.key,...(c.val()||{})});
+  if(rSnap.exists())rSnap.forEach(c=>mapa[c.key]={...(mapa[c.key]||{}),uid:c.key,...(c.val()||{})});
+  const arr=Object.values(mapa).sort((a,b)=>Number(b.pontos||0)-Number(a.pontos||0));
+  box.innerHTML=`<h2>🛡️ Painel do ADM</h2>
+  <p class="small">UID do ADM: ${escapar(ADMIN_UID)}</p>
+  <input id="buscaAdmin" placeholder="🔎 Buscar por nome ou UID" oninput="filtrarAdmin()">
+  <div id="adminLista">${arr.map(adminCard).join("")||"<p>Nenhum jogador.</p>"}</div>`;
+ }catch(e){box.innerHTML=`<h2>🛡️ Painel do ADM</h2><div class="danger">❌ ${escapar(e.message||e)}</div>`}
 }
-
-
-/* =====================================
-   INICIAR JOGO
-===================================== */
-
-window.iniciarJogo = function(){
-
-  $("inicio").classList.add("hidden");
-
-  $("jogo").classList.remove("hidden");
-
-  abrirTela("aventura");
-
-  atualizarTela();
-
+function adminCard(p){
+ return `<div class="card admin-player" data-search="${escapar((p.nome||"")+" "+(p.uid||"").toLowerCase())}">
+ <h3>${nomeHTML(p.uid,p.nome||"Jogador")}</h3>
+ <div class="small">UID: ${escapar(p.uid)}</div>
+ <div class="grid">
+  <input id="n-${p.uid}" value="${escapar(p.nome||"Jogador")}" placeholder="Nome">
+  <input id="p-${p.uid}" type="number" value="${Number(p.pontos||0)}" placeholder="Pontos">
+  <input id="m-${p.uid}" type="number" value="${Number(p.moedas||0)}" placeholder="Moedas">
+  <input id="l-${p.uid}" type="number" value="${Number(p.nivel||1)}" placeholder="Nível">
+ </div>
+ <div style="margin-top:8px">
+  <button class="btn green" onclick="editarPlayer('${p.uid}')">💾 Salvar</button>
+  <button class="btn red" onclick="bloquear('${p.uid}')">🚫 Bloquear</button>
+  <button class="btn dark" onclick="removerPlayer('${p.uid}')">🗑️ Remover</button>
+ </div></div>`;
+}
+window.filtrarAdmin=()=>{
+ const q=($("buscaAdmin").value||"").toLowerCase();
+ document.querySelectorAll(".admin-player").forEach(x=>x.style.display=x.dataset.search.includes(q)?"block":"none");
+};
+window.editarPlayer=async uid=>{
+ if(!admin()||uid===ADMIN_UID)return;
+ const nome=$(`n-${uid}`).value.trim()||"Jogador";
+ const pontos=Number($(`p-${uid}`).value||0);
+ const moedas=Number($(`m-${uid}`).value||0);
+ const nivel=Number($(`l-${uid}`).value||1);
+ try{
+  await update(ref(db,`jogadores/${uid}`),{nome,pontos,moedas,nivel,atualizadoEm:Date.now()});
+  await update(ref(db,`ranking/${uid}`),{uid,nome,pontos,nivel});
+  aviso("✅ Jogador atualizado.");
+  carregarAdmin();
+ }catch(e){aviso("❌ "+(e.message||"Erro"))}
+};
+window.bloquear=async uid=>{
+ if(!admin()||uid===ADMIN_UID)return;
+ try{await set(ref(db,`bloqueados/${uid}`),true);aviso("🚫 Jogador bloqueado.");carregarAdmin()}catch(e){aviso("❌ "+e.message)}
+};
+window.removerPlayer=async uid=>{
+ if(!admin()||uid===ADMIN_UID)return;
+ if(!confirm("Remover os dados deste jogador?"))return;
+ try{await remove(ref(db,`jogadores/${uid}`));await remove(ref(db,`ranking/${uid}`));await remove(ref(db,`bloqueados/${uid}`));aviso("🗑️ Dados removidos.");carregarAdmin()}catch(e){aviso("❌ "+e.message)}
 };
 
-
-/* =====================================
-   TELA INICIAL
-===================================== */
-
-window.telaInicial = function(){
-
-  $("jogo").classList.add("hidden");
-
-  $("inicio").classList.remove("hidden");
-
-};
-
-
-/* =====================================
-   ABRIR TELA
-===================================== */
-
-window.abrirTela = function(id){
-
-  const telas = [
-
-    "aventura",
-    "loja",
-    "combate",
-    "ranking",
-    "personagemTela",
-    "nomeTela",
-    "admin"
-
-  ];
-
-  telas.forEach(tela => {
-
-    const elemento = $(tela);
-
-    if(elemento){
-
-      elemento.classList.add("hidden");
-
-    }
-
-  });
-
-  if($(id)){
-
-    $(id).classList.remove("hidden");
-
-  }
-
-  if(id === "loja"){
-
-    $("moedasLoja").textContent =
-      jogador.moedas;
-
-  }
-
-  if(id === "ranking"){
-
-    carregarRanking();
-
-  }
-
-};
-
-
-/* =====================================
-   SALVAR JOGO
-===================================== */
-
-window.salvarJogo = async function(){
-
-  if(!usuarioFirebase){
-
-    mensagem("⏳ Conectando...");
-
-    return;
-
-  }
-
-  try{
-
-    const dados = {
-
-      nome:jogador.nome,
-
-      vida:jogador.vida,
-
-      vidaMax:jogador.vidaMax,
-
-      mana:jogador.mana,
-
-      manaMax:jogador.manaMax,
-
-      pontos:jogador.pontos,
-
-      moedas:jogador.moedas,
-
-      nivel:jogador.nivel,
-
-      personagem:jogador.personagem,
-
-      arma:jogador.arma,
-
-      danoArma:jogador.danoArma,
-
-      poder:jogador.poder,
-
-      danoPoder:jogador.danoPoder,
-
-      bloqueado:jogador.bloqueado || false,
-
-      atualizadoEm:Date.now(),
-
-      versao:VERSAO
-
-    };
-
-
-    /*
-      Atualizamos jogadores e ranking
-      ao mesmo tempo.
-
-      A cor não é usada aqui para decidir
-      quem é ADM.
-    */
-
-    const updates = {};
-
-    updates[
-      `jogadores/${usuarioFirebase.uid}`
-    ] = dados;
-
-    updates[
-      `ranking/${usuarioFirebase.uid}`
-    ] = {
-
-      uid:usuarioFirebase.uid,
-
-      nome:jogador.nome,
-
-      pontos:jogador.pontos,
-
-      nivel:jogador.nivel,
-
-      personagem:jogador.personagem,
-
-      atualizadoEm:Date.now(),
-
-      nomeColorido:
-        usuarioFirebase.uid === ADMIN_UID
-
-    };
-
-
-    await update(
-      ref(db),
-      updates
-    );
-
-
-    mensagem(
-      "💾 Jogo salvo com sucesso!"
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao salvar. Verifique as regras do Firebase."
-    );
-
-  }
-
-};
-
-
-/* =====================================
-   CARREGAR JOGO
-===================================== */
-
-window.carregarJogo = async function(){
-
+onAuthStateChanged(auth,async user=>{
+ if(user){
+  usuarioFirebase=user;
+  $("status").textContent=admin()?"🛡️ Autenticado como ADM":"🟢 Autenticado";
   await carregarJogador();
-
-  mensagem(
-    "📂 Jogo carregado!"
-  );
-
-};
-
-
-/* =====================================
-   NOVO JOGO
-===================================== */
-
-window.novoJogo = async function(){
-
-  if(
-    !confirm(
-      "Começar um novo jogo? Seu progresso atual será reiniciado."
-    )
-  ){
-
-    return;
-
-  }
-
-
-  const nomeAtual =
-    jogador.nome;
-
-
-  jogador = {
-
-    nome:nomeAtual,
-
-    vida:100,
-
-    vidaMax:100,
-
-    mana:100,
-
-    manaMax:100,
-
-    pontos:0,
-
-    moedas:500,
-
-    nivel:1,
-
-    personagem:"Guerreiro",
-
-    arma:"Nenhuma",
-
-    danoArma:0,
-
-    poder:"Nenhum",
-
-    danoPoder:0,
-
-    bloqueado:false
-
-  };
-
-
-  atualizarTela();
-
-  await salvarJogo();
-
-};
-
-
-/* =====================================
-   SALVAR NOME
-===================================== */
-
-window.salvarNome = async function(){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  let nome =
-    $("inputNome").value.trim();
-
-
-  if(!nome){
-
-    mensagem(
-      "❌ Digite um nome."
-    );
-
-    return;
-
-  }
-
-
-  if(nome.length < 2){
-
-    mensagem(
-      "❌ O nome precisa ter pelo menos 2 caracteres."
-    );
-
-    return;
-
-  }
-
-
-  if(nome.length > 20){
-
-    mensagem(
-      "❌ O nome pode ter no máximo 20 caracteres."
-    );
-
-    return;
-
-  }
-
-
-  jogador.nome = nome;
-
-  atualizarTela();
-
-  await salvarJogo();
-
-  mensagem(
-    "👤 Nome atualizado!"
-  );
-
-};
-
-
-/* =====================================
-   AVENTURA
-===================================== */
-
-window.ganharAventura = async function(nivel){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  const moedas =
-    30 * nivel;
-
-  const pontos =
-    15 * nivel;
-
-
-  jogador.moedas += moedas;
-
-  jogador.pontos += pontos;
-
-
-  if(
-    jogador.pontos >=
-    jogador.nivel * 200
-  ){
-
-    jogador.nivel++;
-
-    jogador.vidaMax += 20;
-
-    jogador.manaMax += 10;
-
-    jogador.vida =
-      jogador.vidaMax;
-
-    jogador.mana =
-      jogador.manaMax;
-
-    mensagem(
-      `🎉 Você subiu para o nível ${jogador.nivel}!`
-    );
-
-  }
-
-
-  atualizarTela();
-
-  await salvarJogo();
-
-  mensagem(
-    `🗺️ Aventura concluída! +${pontos} pontos e +${moedas} moedas.`
-  );
-
-};
-
-
-/* =====================================
-   COMPRAR PERSONAGEM
-===================================== */
-
-window.comprarPersonagem = async function(nome,preco){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    nome === "Guerreiro"
-  ){
-
-    jogador.personagem =
-      nome;
-
-    atualizarTela();
-
-    await salvarJogo();
-
-    mensagem(
-      "⚔️ Guerreiro selecionado!"
-    );
-
-    return;
-
-  }
-
-
-  if(
-    jogador.moedas < preco
-  ){
-
-    mensagem(
-      "🪙 Moedas insuficientes."
-    );
-
-    return;
-
-  }
-
-
-  jogador.moedas -= preco;
-
-  jogador.personagem =
-    nome;
-
-
-  atualizarTela();
-
-  await salvarJogo();
-
-  mensagem(
-    `🧙 ${nome} comprado!`
-  );
-
-};
-
-
-/* =====================================
-   COMPRAR PODER
-===================================== */
-
-window.comprarPoder = async function(
-  nome,
-  preco,
-  dano
-){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    jogador.moedas < preco
-  ){
-
-    mensagem(
-      "🪙 Moedas insuficientes."
-    );
-
-    return;
-
-  }
-
-
-  jogador.moedas -= preco;
-
-  jogador.poder =
-    nome;
-
-  jogador.danoPoder =
-    dano;
-
-
-  atualizarTela();
-
-  await salvarJogo();
-
-  mensagem(
-    `✨ ${nome} comprado!`
-  );
-
-};
-
-
-/* =====================================
-   COMPRAR ARMA
-===================================== */
-
-window.comprarArma = async function(
-  nome,
-  preco,
-  dano
-){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    jogador.moedas < preco
-  ){
-
-    mensagem(
-      "🪙 Moedas insuficientes."
-    );
-
-    return;
-
-  }
-
-
-  jogador.moedas -= preco;
-
-  jogador.arma =
-    nome;
-
-  jogador.danoArma =
-    dano;
-
-
-  atualizarTela();
-
-  await salvarJogo();
-
-  mensagem(
-    `⚔️ ${nome} comprado!`
-  );
-
-};
-
-
-/* =====================================
-   INICIAR COMBATE
-===================================== */
-
-window.iniciarCombate = function(id){
-
-  if(jogador.bloqueado){
-
-    mensagem(
-      "🚫 Sua conta está bloqueada."
-    );
-
-    return;
-
-  }
-
-
-  const base =
-    INIMIGOS[id];
-
-
-  if(!base){
-
-    mensagem(
-      "❌ Inimigo não encontrado."
-    );
-
-    return;
-
-  }
-
-
-  inimigoAtual = {
-
-    ...base,
-
-    vida:base.vida
-
-  };
-
-
-  batalhaAtiva = true;
-
-
-  $("batalhaAtual")
-    .classList
-    .remove("hidden");
-
-
-  $("nomeInimigo")
-    .textContent =
-    inimigoAtual.nome;
-
-
-  $("emojiInimigo")
-    .textContent =
-    inimigoAtual.emoji;
-
-
-  atualizarBatalha();
-
-
-  $("logBatalha").innerHTML =
-    `<div>⚔️ A batalha começou contra ${escaparHTML(inimigoAtual.nome)}!</div>`;
-
-
-  $("batalhaAtual")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-};
-
-
-/* =====================================
-   ATUALIZAR BATALHA
-===================================== */
-
-function atualizarBatalha(){
-
-  if(!inimigoAtual)
-    return;
-
-
-  $("vidaInimigoTexto")
-    .textContent =
-    `${Math.max(0,inimigoAtual.vida)}/${inimigoAtual.vidaMax}`;
-
-
-  const porcentagem =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        inimigoAtual.vida /
-        inimigoAtual.vidaMax *
-        100
-      )
-    );
-
-
-  $("barraVidaInimigo")
-    .style.width =
-    porcentagem + "%";
-
-
-  $("vidaJogadorBatalha")
-    .textContent =
-    `${Math.max(0,jogador.vida)}/${jogador.vidaMax}`;
-
-}
-
-
-/* =====================================
-   LOG DE BATALHA
-===================================== */
-
-function logBatalha(texto){
-
-  const log =
-    $("logBatalha");
-
-
-  const linha =
-    document.createElement("div");
-
-  linha.textContent =
-    texto;
-
-
-  log.appendChild(linha);
-
-  log.scrollTop =
-    log.scrollHeight;
-
-}
-
-
-/* =====================================
-   ATAQUE
-===================================== */
-
-window.atacarInimigo = async function(){
-
-  if(!batalhaAtiva ||
-     !inimigoAtual)
-    return;
-
-
-  let dano =
-    15 +
-    jogador.nivel * 3 +
-    jogador.danoArma;
-
-
-  if(
-    jogador.personagem === "Mago"
-  ){
-
-    dano += 8;
-
-  }
-
-
-  if(
-    jogador.personagem === "Ninja"
-  ){
-
-    dano += 12;
-
-  }
-
-
-  inimigoAtual.vida -=
-    dano;
-
-
-  logBatalha(
-    `⚔️ Você causou ${dano} de dano.`
-  );
-
-
-  if(
-    inimigoAtual.vida <= 0
-  ){
-
-    await vencerBatalha();
-
-    return;
-
-  }
-
-
-  turnoInimigo();
-
-  atualizarBatalha();
-
-};
-
-
-/* =====================================
-   USAR PODER
-===================================== */
-
-window.usarPoderCombate = async function(){
-
-  if(!batalhaAtiva ||
-     !inimigoAtual)
-    return;
-
-
-  if(
-    jogador.poder === "Nenhum" ||
-    jogador.danoPoder <= 0
-  ){
-
-    mensagem(
-      "✨ Você ainda não possui um poder."
-    );
-
-    return;
-
-  }
-
-
-  if(jogador.mana < 20){
-
-    mensagem(
-      "💧 Mana insuficiente."
-    );
-
-    return;
-
-  }
-
-
-  jogador.mana -= 20;
-
-
-  const dano =
-    jogador.danoPoder +
-    jogador.nivel * 2;
-
-
-  inimigoAtual.vida -=
-    dano;
-
-
-  logBatalha(
-    `✨ ${jogador.poder} causou ${dano} de dano!`
-  );
-
-
-  if(
-    inimigoAtual.vida <= 0
-  ){
-
-    await vencerBatalha();
-
-    return;
-
-  }
-
-
-  turnoInimigo();
-
-  atualizarBatalha();
-
-};
-
-
-/* =====================================
-   TURNO DO INIMIGO
-===================================== */
-
-function turnoInimigo(){
-
-  const dano =
-    inimigoAtual.dano;
-
-
-  jogador.vida -=
-    dano;
-
-
-  logBatalha(
-    `💥 ${inimigoAtual.nome} causou ${dano} de dano em você.`
-  );
-
-
-  if(
-    jogador.vida <= 0
-  ){
-
-    jogador.vida = 0;
-
-    batalhaAtiva = false;
-
-    logBatalha(
-      "💀 Você foi derrotado!"
-    );
-
-    mensagem(
-      "💀 Você perdeu a batalha!"
-    );
-
-  }
-
-
-  atualizarTela();
-
-}
-
-
-/* =====================================
-   VITÓRIA
-===================================== */
-
-async function vencerBatalha(){
-
-  const inimigo =
-    inimigoAtual;
-
-
-  jogador.pontos +=
-    inimigo.recompensaPontos;
-
-
-  jogador.moedas +=
-    inimigo.recompensaMoedas;
-
-
-  jogador.vida =
-    Math.min(
-      jogador.vidaMax,
-      jogador.vida + 30
-    );
-
-
-  jogador.mana =
-    Math.min(
-      jogador.manaMax,
-      jogador.mana + 25
-    );
-
-
-  if(
-    jogador.pontos >=
-    jogador.nivel * 200
-  ){
-
-    jogador.nivel++;
-
-    jogador.vidaMax += 20;
-
-    jogador.manaMax += 10;
-
-    jogador.vida =
-      jogador.vidaMax;
-
-    jogador.mana =
-      jogador.manaMax;
-
-
-    logBatalha(
-      `🎉 Você subiu para o nível ${jogador.nivel}!`
-    );
-
-  }
-
-
-  batalhaAtiva = false;
-
-
-  inimigoAtual.vida = 0;
-
-
-  atualizarBatalha();
-
-  atualizarTela();
-
-
-  logBatalha(
-    `🏆 Vitória! +${inimigo.recompensaPontos} pontos e +${inimigo.recompensaMoedas} moedas.`
-  );
-
-
-  await salvarJogo();
-
-
-  mensagem(
-    `🏆 Você derrotou ${inimigo.nome}!`
-  );
-
-}
-
-
-/* =====================================
-   FUGIR
-===================================== */
-
-window.fugirCombate = function(){
-
-  batalhaAtiva = false;
-
-  inimigoAtual = null;
-
-  $("batalhaAtual")
-    .classList
-    .add("hidden");
-
-  mensagem(
-    "🏃 Você fugiu da batalha."
-  );
-
-};
-
-
-/* =====================================
-   RANKING GLOBAL
-===================================== */
-
-window.carregarRanking = async function(){
-
-  const lista =
-    $("listaRanking");
-
-
-  lista.innerHTML =
-    "🔄 Carregando ranking...";
-
-
-  try{
-
-    const snap =
-      await get(
-        ref(db,"ranking")
-      );
-
-
-    if(!snap.exists()){
-
-      lista.innerHTML =
-        "<p>Nenhum jogador ainda.</p>";
-
-      return;
-
-    }
-
-
-    const jogadores = [];
-
-
-    snap.forEach(child => {
-
-      const dados =
-        child.val() || {};
-
-
-      jogadores.push({
-
-        uid:child.key,
-
-        nome:dados.nome ||
-          "Jogador",
-
-        pontos:Number(
-          dados.pontos || 0
-        ),
-
-        nivel:Number(
-          dados.nivel || 1
-        ),
-
-        personagem:
-          dados.personagem ||
-          "Guerreiro"
-
-      });
-
-    });
-
-
-    jogadores.sort(
-      (a,b) =>
-        b.pontos - a.pontos
-    );
-
-
-    lista.innerHTML = "";
-
-
-    jogadores.forEach(
-      (p,index) => {
-
-        const item =
-          document.createElement("div");
-
-
-        item.className =
-          "ranking-item";
-
-
-        let medalha =
-          "#" + (index + 1);
-
-
-        if(index === 0)
-          medalha = "🥇";
-
-        if(index === 1)
-          medalha = "🥈";
-
-        if(index === 2)
-          medalha = "🥉";
-
-
-        item.innerHTML = `
-
-          <div class="posicao">
-            ${medalha}
-          </div>
-
-          <div>
-            ${htmlNomeJogador(
-              p.uid,
-              p.nome
-            )}
-
-            <div class="pontos-ranking">
-              Nível ${p.nivel}
-              • ${escaparHTML(p.personagem)}
-            </div>
-          </div>
-
-          <div>
-            ⭐ ${p.pontos}
-          </div>
-
-        `;
-
-
-        lista.appendChild(item);
-
-      }
-    );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    lista.innerHTML =
-      "❌ Erro ao carregar ranking.";
-
-  }
-
-};
-
-
-/* =====================================
-   ADMIN - ABRIR
-===================================== */
-
-window.abrirAdmin = async function(){
-
-  if(!ehAdmin()){
-
-    mensagem(
-      "❌ Acesso administrativo negado."
-    );
-
-    return;
-
-  }
-
-
-  abrirTela("admin");
-
-  await carregarJogadoresAdmin();
-
-};
-
-
-/* =====================================
-   ADMIN - CARREGAR JOGADORES
-===================================== */
-
-let jogadoresAdminCache = [];
-
-
-window.carregarJogadoresAdmin = async function(){
-
-  if(!ehAdmin()){
-
-    mensagem(
-      "❌ Acesso administrativo negado."
-    );
-
-    return;
-
-  }
-
-
-  const lista =
-    $("listaAdmin");
-
-
-  lista.innerHTML =
-    "🔄 Carregando jogadores...";
-
-
-  try{
-
-    const [jogadoresSnap,rankingSnap] =
-      await Promise.all([
-
-        get(
-          ref(db,"jogadores")
-        ),
-
-        get(
-          ref(db,"ranking")
-        )
-
-      ]);
-
-
-    const mapa =
-      new Map();
-
-
-    /*
-      Primeiro pega jogadores.
-    */
-
-    if(jogadoresSnap.exists()){
-
-      jogadoresSnap.forEach(child => {
-
-        mapa.set(
-          child.key,
-          {
-            uid:child.key,
-            ...(child.val() || {})
-          }
-        );
-
-      });
-
-    }
-
-
-    /*
-      Depois completa com ranking.
-    */
-
-    if(rankingSnap.exists()){
-
-      rankingSnap.forEach(child => {
-
-        const uid =
-          child.key;
-
-        const dados =
-          child.val() || {};
-
-
-        if(mapa.has(uid)){
-
-          mapa.set(
-            uid,
-            {
-              ...mapa.get(uid),
-              ...dados
-            }
-          );
-
-        }else{
-
-          mapa.set(
-            uid,
-            {
-              uid,
-              ...dados
-            }
-          );
-
-        }
-
-      });
-
-    }
-
-
-    jogadoresAdminCache =
-      Array.from(
-        mapa.values()
-      );
-
-
-    jogadoresAdminCache.sort(
-      (a,b) =>
-        Number(b.pontos || 0) -
-        Number(a.pontos || 0)
-    );
-
-
-    renderizarAdmin(
-      jogadoresAdminCache
-    );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    lista.innerHTML =
-      `
-      <div class="info">
-        ❌ Erro ao carregar jogadores.
-        <br><br>
-        ${escaparHTML(error.message)}
-      </div>
-      `;
-
-  }
-
-};
-
-
-/* =====================================
-   ADMIN - RENDERIZAR
-===================================== */
-
-function renderizarAdmin(listaJogadores){
-
-  const lista =
-    $("listaAdmin");
-
-
-  if(!listaJogadores.length){
-
-    lista.innerHTML =
-      "<p>Nenhum jogador encontrado.</p>";
-
-    return;
-
-  }
-
-
-  lista.innerHTML = "";
-
-
-  listaJogadores.forEach(p => {
-
-    const card =
-      document.createElement("div");
-
-
-    card.className =
-      "admin-card";
-
-
-    const admin =
-      p.uid === ADMIN_UID;
-
-
-    const bloqueado =
-      p.bloqueado === true;
-
-
-    card.innerHTML = `
-
-      <div class="admin-card-top">
-
-        <div>
-
-          <div style="font-size:18px">
-            ${htmlNomeJogador(
-              p.uid,
-              p.nome || "Jogador"
-            )}
-
-            ${
-              admin
-              ? '<span class="badge badge-admin">ADM</span>'
-              : ''
-            }
-
-            ${
-              bloqueado
-              ? '<span class="badge badge-bloqueado">BLOQUEADO</span>'
-              : ''
-            }
-
-          </div>
-
-          <div style="color:#777;font-size:12px;margin-top:5px">
-            UID: ${escaparHTML(p.uid)}
-          </div>
-
-        </div>
-
-        <div>
-          ⭐ ${Number(p.pontos || 0)}
-          <br>
-          🪙 ${Number(p.moedas || 0)}
-          <br>
-          📈 Nível ${Number(p.nivel || 1)}
-        </div>
-
-      </div>
-
-
-      <div class="admin-acoes">
-
-        <button
-          class="btn btn-azul"
-          data-acao="editar"
-          data-uid="${escaparHTML(p.uid)}">
-          ✏️ Editar
-        </button>
-
-        <button
-          class="btn"
-          data-acao="ver"
-          data-uid="${escaparHTML(p.uid)}">
-          👁️ Ver
-        </button>
-
-        ${
-          !admin
-          ? `
-            <button
-              class="btn btn-amarelo"
-              data-acao="bloquear"
-              data-uid="${escaparHTML(p.uid)}">
-              ${bloqueado ? "🔓 Desbloquear" : "🚫 Bloquear"}
-            </button>
-
-            <button
-              class="btn btn-vermelho"
-              data-acao="remover"
-              data-uid="${escaparHTML(p.uid)}">
-              🗑️ Remover
-            </button>
-          `
-          : ""
-        }
-
-      </div>
-
-    `;
-
-
-    lista.appendChild(card);
-
-  });
-
-
-  lista.querySelectorAll(
-    "[data-acao]"
-  ).forEach(botao => {
-
-    botao.addEventListener(
-      "click",
-      () => {
-
-        const acao =
-          botao.dataset.acao;
-
-        const uid =
-          botao.dataset.uid;
-
-
-        if(acao === "editar")
-          editarJogadorAdmin(uid);
-
-        if(acao === "ver")
-          verJogadorAdmin(uid);
-
-        if(acao === "bloquear")
-          bloquearJogadorAdmin(uid);
-
-        if(acao === "remover")
-          removerJogadorAdmin(uid);
-
-      }
-    );
-
-  });
-
-}
-
-
-/* =====================================
-   ADMIN - FILTRO
-===================================== */
-
-window.filtrarAdmin = function(){
-
-  const termo =
-    $("pesquisaAdmin")
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  if(!termo){
-
-    renderizarAdmin(
-      jogadoresAdminCache
-    );
-
-    return;
-
-  }
-
-
-  const filtrados =
-    jogadoresAdminCache.filter(p => {
-
-      const nome =
-        String(
-          p.nome || ""
-        ).toLowerCase();
-
-      const uid =
-        String(
-          p.uid || ""
-        ).toLowerCase();
-
-
-      return (
-        nome.includes(termo) ||
-        uid.includes(termo)
-      );
-
-    });
-
-
-  renderizarAdmin(
-    filtrados
-  );
-
-};
-
-
-/* =====================================
-   ADMIN - EDITAR
-===================================== */
-
-async function editarJogadorAdmin(uid){
-
-  if(!ehAdmin())
-    return;
-
-
-  if(uid === ADMIN_UID){
-
-    mensagem(
-      "ℹ️ Esse é o seu próprio perfil ADM."
-    );
-
-  }
-
-
-  const jogadorEncontrado =
-    jogadoresAdminCache.find(
-      p => p.uid === uid
-    );
-
-
-  if(!jogadorEncontrado)
-    return;
-
-
-  const novoNome =
-    prompt(
-      "Nome do jogador:",
-      jogadorEncontrado.nome ||
-      "Jogador"
-    );
-
-
-  if(novoNome === null)
-    return;
-
-
-  const pontosTexto =
-    prompt(
-      "Pontos:",
-      Number(
-        jogadorEncontrado.pontos || 0
-      )
-    );
-
-
-  if(pontosTexto === null)
-    return;
-
-
-  const moedasTexto =
-    prompt(
-      "Moedas:",
-      Number(
-        jogadorEncontrado.moedas || 0
-      )
-    );
-
-
-  if(moedasTexto === null)
-    return;
-
-
-  const nivelTexto =
-    prompt(
-      "Nível:",
-      Number(
-        jogadorEncontrado.nivel || 1
-      )
-    );
-
-
-  if(nivelTexto === null)
-    return;
-
-
-  const dadosAtualizados = {
-
-    nome:
-      novoNome.trim() || "Jogador",
-
-    pontos:
-      Math.max(
-        0,
-        Number(pontosTexto) || 0
-      ),
-
-    moedas:
-      Math.max(
-        0,
-        Number(moedasTexto) || 0
-      ),
-
-    nivel:
-      Math.max(
-        1,
-        Number(nivelTexto) || 1
-      ),
-
-    atualizadoEm:
-      Date.now()
-
-  };
-
-
-  try{
-
-    const updates = {};
-
-
-    updates[
-      `jogadores/${uid}/nome`
-    ] =
-      dadosAtualizados.nome;
-
-
-    updates[
-      `jogadores/${uid}/pontos`
-    ] =
-      dadosAtualizados.pontos;
-
-
-    updates[
-      `jogadores/${uid}/moedas`
-    ] =
-      dadosAtualizados.moedas;
-
-
-    updates[
-      `jogadores/${uid}/nivel`
-    ] =
-      dadosAtualizados.nivel;
-
-
-    updates[
-      `ranking/${uid}/nome`
-    ] =
-      dadosAtualizados.nome;
-
-
-    updates[
-      `ranking/${uid}/pontos`
-    ] =
-      dadosAtualizados.pontos;
-
-
-    updates[
-      `ranking/${uid}/nivel`
-    ] =
-      dadosAtualizados.nivel;
-
-
-    updates[
-      `ranking/${uid}/atualizadoEm`
-    ] =
-      Date.now();
-
-
-    await update(
-      ref(db),
-      updates
-    );
-
-
-    mensagem(
-      "✅ Jogador atualizado!"
-    );
-
-
-    await carregarJogadoresAdmin();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao editar jogador."
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   ADMIN - VER
-===================================== */
-
-async function verJogadorAdmin(uid){
-
-  if(!ehAdmin())
-    return;
-
-
-  try{
-
-    const snap =
-      await get(
-        ref(
-          db,
-          "jogadores/" + uid
-        )
-      );
-
-
-    if(!snap.exists()){
-
-      mensagem(
-        "❌ Dados não encontrados."
-      );
-
-      return;
-
-    }
-
-
-    const dados =
-      snap.val() || {};
-
-
-    const texto =
-      JSON.stringify(
-        {
-          uid,
-          ...dados
-        },
-        null,
-        2
-      );
-
-
-    const painel =
-      document.createElement("div");
-
-
-    painel.style.position =
-      "fixed";
-
-    painel.style.inset =
-      "0";
-
-    painel.style.background =
-      "rgba(0,0,0,.9)";
-
-    painel.style.zIndex =
-      "10000";
-
-    painel.style.padding =
-      "20px";
-
-    painel.style.overflow =
-      "auto";
-
-
-    painel.innerHTML = `
-
-      <div style="
-        max-width:900px;
-        margin:auto;
-        background:#111827;
-        padding:20px;
-        border-radius:20px;
-      ">
-
-        <h2>👁️ Dados do jogador</h2>
-
-        <textarea readonly>${escaparHTML(texto)}</textarea>
-
-        <button
-          class="btn btn-vermelho"
-          id="fecharDadosAdmin">
-          Fechar
-        </button>
-
-      </div>
-
-    `;
-
-
-    document.body.appendChild(
-      painel
-    );
-
-
-    painel
-      .querySelector(
-        "#fecharDadosAdmin"
-      )
-      .onclick = () => {
-
-        painel.remove();
-
-      };
-
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao visualizar jogador."
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   ADMIN - BLOQUEAR
-===================================== */
-
-async function bloquearJogadorAdmin(uid){
-
-  if(!ehAdmin())
-    return;
-
-
-  if(uid === ADMIN_UID){
-
-    mensagem(
-      "❌ O ADM principal não pode ser bloqueado."
-    );
-
-    return;
-
-  }
-
-
-  const atual =
-    jogadoresAdminCache.find(
-      p => p.uid === uid
-    );
-
-
-  if(!atual)
-    return;
-
-
-  const novoEstado =
-    atual.bloqueado !== true;
-
-
-  try{
-
-    const updates = {};
-
-
-    updates[
-      `jogadores/${uid}/bloqueado`
-    ] =
-      novoEstado;
-
-
-    await update(
-      ref(db),
-      updates
-    );
-
-
-    mensagem(
-      novoEstado
-      ? "🚫 Jogador bloqueado."
-      : "🔓 Jogador desbloqueado."
-    );
-
-
-    await carregarJogadoresAdmin();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao alterar bloqueio."
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   ADMIN - REMOVER
-===================================== */
-
-async function removerJogadorAdmin(uid){
-
-  if(!ehAdmin())
-    return;
-
-
-  if(uid === ADMIN_UID){
-
-    mensagem(
-      "❌ O ADM principal não pode ser removido."
-    );
-
-    return;
-
-  }
-
-
-  const confirmar =
-    confirm(
-      "Tem certeza que deseja remover este jogador?"
-    );
-
-
-  if(!confirmar)
-    return;
-
-
-  try{
-
-    const updates = {};
-
-
-    updates[
-      `jogadores/${uid}`
-    ] = null;
-
-
-    updates[
-      `ranking/${uid}`
-    ] = null;
-
-
-    await update(
-      ref(db),
-      updates
-    );
-
-
-    mensagem(
-      "🗑️ Jogador removido."
-    );
-
-
-    await carregarJogadoresAdmin();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    mensagem(
-      "❌ Erro ao remover jogador."
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   EXPOR FUNÇÃO
-===================================== */
-
-window.atualizarTela =
-  atualizarTela;
-
-
-/* =====================================
-   SERVICE WORKER
-===================================== */
-
-if(
-  "serviceWorker" in navigator
-){
-
-  window.addEventListener(
-    "load",
-    () => {
-
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch(
-          erro =>
-            console.error(
-              "Service Worker:",
-              erro
-            )
-        );
-
-    }
-  );
-
-}
-
+ }else{
+  usuarioFirebase=null;
+  $("status").textContent="⏳ Autenticando...";
+ }
+});
+signInAnonymously(auth).catch(e=>{
+ console.error(e);
+ $("status").textContent="❌ Erro de autenticação: "+e.message;
+});
+
+window.mostrar=mostrar;window.salvar=salvar;window.carregarAdmin=carregarAdmin;window.renderLoja=renderLoja;window.renderCombate=renderCombate;
 </script>
-
 </body>
- </html>
+</html>

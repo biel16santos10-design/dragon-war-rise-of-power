@@ -1,123 +1,543 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Dragon War — Jogador</title><style>
-:root{--bg:#050814;--panel:#090f21;--line:#344875;--text:#f7f8ff;--muted:#aeb9d8;--gold:#ffbd19;--blue:#25b9ff;--red:#ff3856;--purple:#b84cff;--green:#21e69a;--cyan:#25e8ff}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 50% 10%,#183b75,#081128 40%,#03050b 82%);overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;background:radial-gradient(circle at 15% 35%,#124d87,transparent 30%),radial-gradient(circle at 85% 55%,#3c135f,transparent 30%)}
-button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1500px;margin:auto;min-height:100vh;padding:10px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid #28416e;border-radius:20px;background:#050a19e8;position:sticky;top:7px;z-index:20}
-.profile{display:flex;align-items:center;gap:10px}.avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:31px;background:linear-gradient(135deg,#0a1938,#1d68bb);border:3px solid #2ecaff;box-shadow:0 0 24px #1599ff66}
-.name{font-size:clamp(20px,4vw,34px);font-weight:900;background:linear-gradient(90deg,#ff35d7,#4cf4ff,#ffd02f);-webkit-background-clip:text;color:transparent}.player-name{color:#fff;background:none}.uid{color:#9fb2d9;font-size:12px;margin-top:4px}.crown{font-size:24px}.top-actions{display:flex;gap:7px}.icon-btn{border:1px solid #3b4d79;background:#101936;color:#fff;border-radius:12px;padding:8px}
-.hero{min-height:330px;margin-top:12px;border:1px solid #355183;border-radius:28px;overflow:hidden;position:relative;background:linear-gradient(135deg,#07152e,#17275d 45%,#160d2b)}
-.hero:after{content:"🐉";position:absolute;right:4%;bottom:-50px;font-size:220px;opacity:.38;filter:drop-shadow(0 0 28px #26c8ff)}.hero-content{position:relative;z-index:2;padding:30px 18px;text-align:center}
-.logo{font-weight:1000;font-size:clamp(45px,8vw,88px);line-height:.8;text-shadow:0 0 20px #ff3d00,0 0 45px #24cfff;color:#ff7a18}.logo span{display:block;color:#39d9ff;font-size:.62em;margin-top:12px}.tag{font-size:18px;color:#d6e7ff;margin:18px 0}
-.menu{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.btn{border:2px solid #3a5a8d;border-radius:16px;padding:13px;background:#0c1530;color:#fff;font-weight:900;min-height:54px}.gold{border-color:#ffc51e;background:linear-gradient(135deg,#5e2c05,#1b1207)}.blue{border-color:#27baff;background:linear-gradient(135deg,#092b59,#0c1530)}.red{border-color:#ff3454;background:linear-gradient(135deg,#5b0d1b,#160b13)}.purple{border-color:#bb46ff;background:linear-gradient(135deg,#43105f,#150c25)}.green{border-color:#19e79c;background:linear-gradient(135deg,#074d37,#071b1a)}.cyan{border-color:#28eaff;background:linear-gradient(135deg,#074a59,#081629)}.gray{border-color:#aebbd0;background:#141b2b}
-.panel{margin-top:14px;padding:16px;border:1px solid #30456f;border-radius:23px;background:#070c1ce8;box-shadow:0 15px 50px #0005}.panel h2{margin:0 0 13px}.hidden{display:none!important}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stat{padding:16px;border:1px solid #32456e;border-radius:17px;background:#0a1125;text-align:center}.stat b{display:block;font-size:28px;margin-top:6px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{padding:15px;border:1px solid #354a77;border-radius:19px;background:linear-gradient(145deg,#101a38,#080e20)}.card .emoji,.enemy .emoji{font-size:54px;text-align:center}.price{font-weight:900;color:#ffd34a}.small{color:var(--muted);font-size:13px}
-.enemy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.enemy{border:2px solid #3c4d70;border-radius:21px;padding:15px;background:linear-gradient(145deg,#160d1a,#0a0e1d);cursor:pointer}.enemy.selected{border-color:#ffbd19;box-shadow:0 0 25px #ffbd1938}.hp{height:13px;background:#202b48;border-radius:99px;overflow:hidden}.hp i{display:block;height:100%;background:linear-gradient(90deg,#18e0ff,#8a3cff)}
-.row{display:flex;gap:8px;flex-wrap:wrap}input,select{width:100%;padding:11px;border-radius:11px;border:1px solid #40547d;background:#070c1b;color:#fff}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.full{grid-column:1/-1}
-.rank-row{display:grid;grid-template-columns:52px 1fr auto;gap:9px;align-items:center;padding:11px;border:1px solid #2d416b;border-radius:13px;background:#0a1227;margin:7px 0}.rank-points{color:#ffd34a;font-weight:900}.badge{display:inline-block;padding:4px 8px;border-radius:99px;background:#19264a;border:1px solid #486197;font-size:12px;font-weight:900}
-.toast{position:fixed;right:14px;bottom:14px;z-index:100;padding:12px 15px;border-radius:12px;background:#111b33;border:1px solid #4a6396;box-shadow:0 15px 35px #0008}.admin-banner{text-align:center;margin:8px auto;padding:9px;border-radius:11px;background:#063c46;border:1px solid #27eaff;color:#71f5ff;font-weight:900}.admin-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}.player-list{max-height:560px;overflow:auto}.player-btn{width:100%;text-align:left;border:1px solid #2f426c;background:#0a1226;color:#fff;border-radius:12px;padding:11px;margin:5px 0}.footer{text-align:center;color:#7181a4;padding:20px}
-@media(max-width:900px){.menu{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.grid,.enemy-grid,.admin-grid{grid-template-columns:1fr}}
-@media(max-width:560px){.top{position:static}.top-actions{display:none}.avatar{width:50px;height:50px}.menu{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.logo{font-size:45px}.hero{min-height:350px}}
-</style></head><body><div class="app">
-<header class="top"><div class="profile"><div class="avatar">⚔️</div><div><div id="playerName" class="name player-name">Jogador</div><div class="uid">UID: <span id="uid">...</span></div></div></div><div class="top-actions"><button class="icon-btn" onclick="mostrar('config')">⚙️</button><button class="icon-btn" onclick="mostrar('ranking')">🏆</button><button class="icon-btn" onclick="mostrar('recompensas')">🎁</button></div></header>
-<section class="hero"><div class="hero-content"><div class="logo">DRAGON <span>WAR</span></div><div class="tag">RISE OF POWER • Jogue, evolua, domine!</div><div class="menu">
-<button class="btn gold" onclick="mostrar('jogar')">⚔️ JOGAR</button><button class="btn blue" onclick="mostrar('loja')">🛒 LOJA</button><button class="btn red" onclick="mostrar('combate')">⚔️ COMBATE</button><button class="btn purple" onclick="mostrar('poderes')">🔥 PODER</button><button class="btn green" onclick="salvar()">💾 SALVAR</button><button class="btn cyan" onclick="carregar()">📂 CARREGAR</button><button class="btn gray" onclick="novoJogo()">➕ NOVO JOGO</button><button class="btn blue" onclick="mostrar('ranking')">🏆 RANKING</button>
-</div></div></section>
-<div id="jogar" class="panel"><h2>🎮 Seu progresso</h2><div class="stats"><div class="stat">❤️ Vida<b id="vida">100</b></div><div class="stat">💧 Mana<b id="mana">100</b></div><div class="stat">⭐ Pontos<b id="pontos">0</b></div><div class="stat">🪙 Moedas<b id="moedas">500</b></div><div class="stat">🏅 Patente<b id="patente">Iniciante</b></div></div><div class="panel"><h2>👤 Seu nome</h2><div class="form"><div class="full"><input id="nomeInput" maxlength="18" placeholder="Digite seu nome"></div><button class="btn gold" onclick="salvarNome()">💾 SALVAR NOME</button><button class="btn blue" onclick="mostrar('ranking')">🏆 RANKING</button></div><p class="small">Não são permitidos ADM/ADMIN, palavrões, xingamentos ou nomes ofensivos.</p></div></div>
-<div id="loja" class="panel hidden"><h2>🛒 Loja</h2><div id="lojaGrid" class="grid"></div></div>
-<div id="poderes" class="panel hidden"><h2>🔥 Poderes</h2><div id="poderGrid" class="grid"></div></div>
-<div id="combate" class="panel hidden"><h2>⚔️ COMBATE — 3 INIMIGOS</h2><p class="small">Os três ficam disponíveis ao mesmo tempo. Toque em um para escolher o alvo.</p><div id="enemyGrid" class="enemy-grid"></div><div class="row"><button class="btn red" onclick="atacar()">⚔️ ATACAR</button><button class="btn purple" onclick="usarPoder()">🔥 USAR PODER</button></div><p id="combatLog" class="small">Prepare-se para lutar!</p></div>
-<div id="ranking" class="panel hidden"><h2>🏆 RANKING GLOBAL</h2><button class="btn blue" onclick="ranking()">🔄 ATUALIZAR</button><div id="rankingList" style="margin-top:10px"></div></div>
-<div id="recompensas" class="panel hidden"><h2>🎁 RECOMPENSAS</h2><div class="card"><h3>⭐ Recompensa diária</h3><p>100 moedas + 25 pontos.</p><button class="btn gold" onclick="recompensa()">🎁 RESGATAR</button></div></div>
-<div id="config" class="panel hidden"><h2>⚙️ CONFIGURAÇÕES</h2><button class="btn gray" onclick="location.reload()">🔄 RECARREGAR</button></div>
-<div class="footer">Dragon War: Rise of Power</div>
-<div id="toast" class="toast hidden"></div></div><script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getDatabase,ref,get,set,update,remove} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dragon War: Rise of Power - 2D</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b12;color:#fff;font-family:Arial,sans-serif}
+body{display:flex;align-items:center;justify-content:center}
+#game{position:relative;width:min(1100px,100vw);height:min(700px,100vh);background:#101827;overflow:hidden}
+canvas{display:block;width:100%;height:100%;image-rendering:auto;background:#17261c}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,#1c3046,#070b12 75%);z-index:20;text-align:center}
+.screen h1{font-size:clamp(28px,5vw,58px);margin:0 15px 10px;text-shadow:0 0 20px #00eaff}
+.screen p{font-size:18px;margin:6px}
+button{border:0;border-radius:10px;padding:12px 18px;margin:5px;background:#24364d;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #101822}
+button:hover{filter:brightness(1.25)}
+.primary{background:#0aa66e}
+.gold{background:#9b6a08}
+.red{background:#9e2635}
+.blue{background:#1769aa}
+#hud{position:absolute;left:10px;right:10px;top:10px;display:flex;gap:8px;flex-wrap:wrap;z-index:5;pointer-events:none}
+.stat{background:rgba(4,8,15,.82);border:1px solid #3b536e;border-radius:8px;padding:7px 10px;font-size:14px;box-shadow:0 0 10px rgba(0,0,0,.35)}
+.bar{width:120px;height:8px;background:#222;border-radius:9px;overflow:hidden;margin-top:4px}
+.fill{height:100%;width:100%}
+.hp{background:#e33}
+.mp{background:#21b7ff}
+.xp{background:#f0c43c}
+#message{position:absolute;left:50%;bottom:92px;transform:translateX(-50%);z-index:6;background:rgba(0,0,0,.7);padding:9px 14px;border-radius:10px;min-width:260px;text-align:center;opacity:0;transition:.2s}
+#controls{position:absolute;bottom:10px;left:10px;z-index:7;background:rgba(0,0,0,.6);padding:7px 10px;border-radius:8px;font-size:12px}
+#musicBtn{position:absolute;right:95px;bottom:10px;z-index:8;padding:9px 12px}
+#menuBtn{position:absolute;right:10px;bottom:10px;z-index:8}
+#panel{position:absolute;inset:0;z-index:15;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72)}
+.box{width:min(650px,92%);max-height:85%;overflow:auto;background:#101927;border:2px solid #3c6388;border-radius:15px;padding:18px;box-shadow:0 0 30px #000}
+.box h2{text-align:center;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.item{background:#182638;border-radius:10px;padding:12px}
+.item button{width:100%}
+#start{display:flex}
+#start .dragon{font-size:100px;filter:drop-shadow(0 0 18px #ff6b00);animation:float 2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+kbd{background:#222;padding:2px 5px;border-radius:4px}
+@media(max-width:650px){#controls{display:none}.stat{font-size:11px;padding:5px 7px}.bar{width:75px}}
+</style>
+</head>
+<body>
+<div id="game">
+<canvas id="canvas" width="1100" height="700"></canvas>
 
-const firebaseConfig={
-apiKey:"AIzaSyDA_kn3eNRD9P2D6WDCNbUxBKld0i9Sys",
-authDomain:"dragon-war-rise-of-power.firebaseapp.com",
-databaseURL:"https://dragon-war-rise-of-power-default-rtdb.firebaseio.com",
-projectId:"dragon-war-rise-of-power",
-storageBucket:"dragon-war-rise-of-power.firebasestorage.app",
-messagingSenderId:"1002858781019",
-appId:"1:1002858781019:web:6cd6d1b0173ab37c7fe27e",
-measurementId:"G-PY4TRBXZ8N"
+<div id="start" class="screen">
+  <div class="dragon">🐉</div>
+  <h1>🔥 Dragon War: Rise of Power 🔥</h1>
+  <p>🎮 Desenvolvido por Gabriel Cabral</p>
+  <p>⚔️ Aventura 2D • Loja • Poderes • Dragão • Save</p>
+  <button class="primary" style="font-size:22px;padding:14px 35px" onclick="startGame()">▶ JOGAR</button>
+</div>
+
+<div id="hud">
+  <div class="stat">❤️ Vida <b id="hpText">5/5</b><div class="bar"><div id="hpBar" class="fill hp"></div></div></div>
+  <div class="stat">🔵 Mana <b id="manaText">500/500</b><div class="bar"><div id="manaBar" class="fill mp"></div></div></div>
+  <div class="stat">⭐ XP <b id="xpText">0/100</b><div class="bar"><div id="xpBar" class="fill xp"></div></div></div>
+  <div class="stat">🏆 Nível <b id="levelText">1</b></div>
+  <div class="stat">🪙 <b id="coinText">10000</b></div>
+  <div class="stat">⭐ Pontos <b id="pointText">0</b></div>
+  <div class="stat">⚔️ <b id="weaponText">Faca</b></div>
+</div>
+
+<div id="message"></div>
+<div id="controls">Mover: <kbd>WASD</kbd>/<kbd>↑↓←→</kbd> • Atacar: <kbd>Espaço</kbd> • Poder: <kbd>Q</kbd> • Loja: <kbd>L</kbd></div>
+<button id="musicBtn" onclick="toggleMusic()">🎵 Música: OFF</button><button id="pauseBtn" onclick="togglePause()">⏸️ PAUSAR</button>
+<button id="menuBtn" onclick="openMenu()">☰ MENU</button>
+
+<div id="panel">
+  <div class="box" id="panelBox"></div>
+</div>
+</div>
+
+<script>
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+const W=canvas.width,H=canvas.height;
+
+let running=false;
+let keys={};
+let last=0;
+let messageTimer=0;
+
+// Música de batalha gerada pelo próprio navegador.
+// Não precisa baixar nenhum arquivo de áudio.
+let audioCtx=null, musicTimer=null, musicOn=false, musicStep=0;
+let gamePaused=false;
+
+
+function togglePause(){
+  gamePaused = !gamePaused;
+  const btn = document.getElementById("pauseBtn");
+  if(gamePaused){
+    btn.textContent = "▶️ CONTINUAR";
+    if(musicOn) stopMusic();
+    showMessage("⏸️ Jogo pausado");
+  }else{
+    btn.textContent = "⏸️ PAUSAR";
+    showMessage("▶️ Jogo continuando");
+    if(!musicOn) startMusic();
+  }
+}
+
+function startMusic(){
+  if(musicOn)return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended") audioCtx.resume();
+    musicOn=true;
+    document.getElementById("musicBtn").textContent="🎵 Música: ON";
+    musicStep=0;
+    playBattleNote();
+    musicTimer=setInterval(playBattleNote,220);
+  }catch(e){
+    showMessage("⚠️ O navegador não liberou o áudio.");
+  }
+}
+
+function playBattleNote(){
+  if(!audioCtx || !musicOn)return;
+  const notes=[110,110,146.83,130.81,110,164.81,146.83,98];
+  const bass=[55,55,73.42,65.41];
+  const f=notes[musicStep%notes.length];
+  const b=bass[Math.floor(musicStep/2)%bass.length];
+  tone(f,.16,"sawtooth",.055);
+  if(musicStep%2===0)tone(b,.25,"triangle",.07);
+  if(musicStep%8===7)tone(220,.10,"square",.025);
+  musicStep++;
+}
+
+function tone(freq,duration,type,volume){
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(volume,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+  o.connect(g);g.connect(audioCtx.destination);
+  o.start();o.stop(audioCtx.currentTime+duration);
+}
+
+function stopMusic(){
+  musicOn=false;
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
+  document.getElementById("musicBtn").textContent="🎵 Música: OFF";
+}
+
+function toggleMusic(){
+  if(musicOn)stopMusic();else startMusic();
+}
+
+const player={
+ x:W/2,y:H/2+80,w:34,h:46,speed:220,
+ hp:5,maxHp:5,mana:500,maxMana:500,
+ coins:10000,points:0,level:1,xp:0,
+ weapon:"Faca",attackCooldown:0,invuln:0
 };
-const ADMIN_UID="w2aAcmul8vYJOR05lGLQThAsiTg2";
 
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
-let usuario=null,jogador=null,alvo=0;
-const inimigos=[
-{id:"goblin",nome:"Goblin",emoji:"👹",vida:100,dano:8,pontos:50,moedas:80},
-{id:"demonio",nome:"Demônio",emoji:"😈",vida:250,dano:18,pontos:120,moedas:200},
-{id:"dragao",nome:"Dragão Sombrio",emoji:"🐉",vida:500,dano:30,pontos:300,moedas:500}];
-const personagens=[
-{id:"guerreiro",nome:"Guerreiro",emoji:"🧙",preco:0,bonus:0,desc:"Equilibrado"},
-{id:"ninja",nome:"Ninja",emoji:"🥷",preco:800,bonus:5,desc:"+5 dano"},
-{id:"cavaleiro",nome:"Cavaleiro",emoji:"🛡️",preco:1200,bonus:8,desc:"+8 dano"},
-{id:"mago",nome:"Mago",emoji:"🧝",preco:1800,bonus:12,desc:"+12 dano"}];
-const armas=[
-{id:"espada",nome:"Espada de Ferro",emoji:"⚔️",preco:0,dano:10},
-{id:"katana",nome:"Katana Lunar",emoji:"🗡️",preco:900,dano:18},
-{id:"machado",nome:"Machado Flamejante",emoji:"🪓",preco:1500,dano:28}];
-const poderesBaseLista=[
-{id:"fogo",nome:"🔥 Fogo",preco:400,dano:35},
-{id:"gelo",nome:"❄️ Gelo",preco:700,dano:50},
-{id:"raio",nome:"⚡ Raio",preco:1100,dano:75}];
-const proibidos=["adm","admin","administrador","moderador","mod","merda","caralho","porra","puta","puto","viado","vadia","bosta","fdp","foda-se","fodase","cuzão","otário","otario","idiota","imbecil"];
-const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function toast(m){$("toast").textContent=m;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2500)}
-function patente(p,n){if(p>=10000||n>=30)return"Lendário";if(p>=6000||n>=20)return"Elite";if(p>=3500||n>=15)return"Mestre";if(p>=2000||n>=10)return"Profissional";if(p>=900||n>=6)return"Avançado";if(p>=300||n>=3)return"Intermediário";return"Iniciante"}
-function base(){return{nome:"Jogador",vida:100,mana:100,pontos:0,moedas:500,nivel:1,patente:"Iniciante",personagem:"Guerreiro",arma:"Espada de Ferro",poder:"🔥 Fogo",inventario:{},atualizadoEm:Date.now()}}
-function mostrar(id){document.querySelectorAll(".panel").forEach(x=>x.classList.add("hidden"));$(id)?.classList.remove("hidden");if(id==="ranking")ranking();if(id==="loja")loja();if(id==="poderes")renderPoderes();if(id==="combate")combate();scrollTo({top:$(id)?.offsetTop-70||0,behavior:"smooth"})}
-window.mostrar=mostrar;
-function ui(){$("playerName").textContent=jogador.nome;$("uid").textContent=usuario.uid;$("vida").textContent=jogador.vida;$("mana").textContent=jogador.mana;$("pontos").textContent=jogador.pontos;$("moedas").textContent=jogador.moedas;jogador.patente=patente(jogador.pontos,jogador.nivel);$("patente").textContent=jogador.patente;$("nomeInput").value=jogador.nome}
-async function save(silent=false){jogador.patente=patente(jogador.pontos,jogador.nivel);const u={};u["jogadores/"+usuario.uid]=jogador;u["ranking/"+usuario.uid]={uid:usuario.uid,nome:jogador.nome,pontos:jogador.pontos,nivel:jogador.nivel,patente:jogador.patente,personagem:jogador.personagem,atualizadoEm:Date.now()};try{await update(ref(db),u);ui();if(!silent)toast("✅ Salvo!")}catch(e){toast("❌ Erro ao salvar.")}}
-window.salvar=()=>save();window.carregar=async()=>{await carregar();toast("📂 Carregado!")};
-async function carregar(){
- const s=await get(ref(db,"jogadores/"+usuario.uid));
- if(s.exists() && s.val()?.bloqueado===true){
-   document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;padding:25px;background:#050814;color:white;font-family:Arial"><div style="max-width:520px;text-align:center;border:1px solid #ff3856;border-radius:24px;padding:30px;background:#101327"><div style="font-size:60px">🚫</div><h1>Acesso bloqueado</h1><p>Seu acesso ao Dragon War foi bloqueado pelo administrador.</p></div></div>';
-   throw new Error("PLAYER_BLOCKED");
- }
- jogador=s.exists()?{...base(),...s.val()}:base();
- ui();combate();await carregarCatalogo();
+const weapons={
+ "Faca":{damage:20,price:0,icon:"🔪"},
+ "Espada":{damage:40,price:100,icon:"⚔️"},
+ "Arco":{damage:50,price:200,icon:"🏹"},
+ "Machado":{damage:65,price:350,icon:"🪓"},
+ "Arma Lendária":{damage:80,price:500,icon:"⚡"}
+};
+
+let enemies=[];
+let particles=[];
+let dragon=null;
+let spawnTimer=0;
+let worldTime=0;
+
+function resize(){
+  const rect=document.getElementById("game").getBoundingClientRect();
+  canvas.style.width=rect.width+"px";
+  canvas.style.height=rect.height+"px";
 }
-window.novoJogo=async()=>{if(confirm("Começar um novo jogo?")){jogador=base();await save()}};
-window.salvarNome=async()=>{const n=$("nomeInput").value.trim(),s=n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");if(n.length<3||n.length>18)return toast("❌ Nome deve ter 3-18 caracteres.");if(!/^[\p{L}\p{N}_ -]+$/u.test(n))return toast("❌ Caracteres não permitidos.");if(proibidos.some(x=>s.includes(x)))return toast("🚫 Nome proibido.");jogador.nome=n;await save()};
-function loja(){const arr=[...personagens.map(x=>[x,"personagem"]),...(window.personagensExtra||[]).map(x=>[x,"personagem"]),...armas.map(x=>[x,"arma"]),...(window.armasExtra||[]).map(x=>[x,"arma"])];$("lojaGrid").innerHTML=arr.map(([x,t])=>card(x,t)).join("")}
-function renderPoderes(){ $("poderGrid").innerHTML=[...poderesBase(),...(window.poderesExtra||[])].map(x=>card(x,"poder")).join("")}
-function poderesBase(){return poderesBaseLista}
-function card(x,t){const owned=(t==="personagem"&&jogador.personagem===x.nome)||(t==="arma"&&jogador.arma===x.nome)||(t==="poder"&&jogador.poder===x.nome);return`<div class="card"><div class="emoji">${x.emoji}</div><h3>${esc(x.nome)}</h3><p>${esc(x.desc||"Melhore seu poder.")}</p>${x.dano?`<p>⚔️ Dano: ${x.dano}</p>`:""}<p class="price">🪙 ${x.preco||0}</p><button class="btn ${owned?"green":"gold"}" onclick='comprar(${JSON.stringify(x)},"${t}")'>${owned?"✅ EQUIPADO":"🛒 COMPRAR"}</button></div>`}
-window.comprar=async(x,t)=>{if((t==="personagem"&&jogador.personagem===x.nome)||(t==="arma"&&jogador.arma===x.nome)||(t==="poder"&&jogador.poder===x.nome))return toast("Já equipado.");if(jogador.moedas<x.preco)return toast("❌ Moedas insuficientes.");jogador.moedas-=x.preco;if(t==="personagem")jogador.personagem=x.nome;if(t==="arma")jogador.arma=x.nome;if(t==="poder")jogador.poder=x.nome;await save(true);toast("🛒 Equipado!");loja();renderPoderes();ui()}
-function combate(){ $("enemyGrid").innerHTML=inimigos.map((e,i)=>{const hp=Number(sessionStorage.getItem("hp_"+e.id)??e.vida);return`<div class="enemy ${alvo===i?"selected":""}" onclick="selecionar(${i})"><div class="emoji">${e.emoji}</div><h3>${e.nome}</h3><p>❤️ ${hp}/${e.vida}</p><div class="hp"><i style="width:${hp/e.vida*100}%"></i></div><p>⚔️ ${e.dano} • ⭐ ${e.pontos} • 🪙 ${e.moedas}</p></div>`}).join("")}
-window.selecionar=i=>{alvo=i;combate();toast("🎯 "+inimigos[i].nome)}
-function dano(){
- const arma=[...armas,...(window.armasExtra||[])].find(x=>x.nome===jogador.arma)?.dano||10;
- const pers=[...personagens,...(window.personagensExtra||[])].find(x=>x.nome===jogador.personagem)?.bonus||0;
- return arma+pers+jogador.nivel;
+window.addEventListener("resize",resize); resize();
+
+document.addEventListener("keydown",e=>{
+  if(gamePaused){ if(e.key==="p"||e.key==="P"||e.key==="Escape") togglePause(); return; }
+  keys[e.key.toLowerCase()]=true;
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();
+  if(e.key===" " && running) attack();
+  if(e.key.toLowerCase()==="q" && running) power();
+  if(e.key.toLowerCase()==="l" && running) openShop();
+});
+document.addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
+
+function startGame(){
+  document.getElementById("start").style.display="none";
+  running=true;
+  startMusic();
+  showMessage("🔥 A aventura começou!");
+  spawnInitial();
+  requestAnimationFrame(loop);
 }
-window.atacar=async()=>{const e=inimigos[alvo],k="hp_"+e.id;let hp=Math.max(0,Number(sessionStorage.getItem(k)??e.vida)-dano());sessionStorage.setItem(k,hp);if(hp===0){jogador.pontos+=e.pontos;jogador.moedas+=e.moedas;sessionStorage.removeItem(k);$("combatLog").textContent=`🏆 ${e.nome} derrotado! +${e.pontos} pontos e +${e.moedas} moedas.`}else{jogador.vida-=e.dano;if(jogador.vida<=0)jogador.vida=100;$("combatLog").textContent=`⚔️ Ataque realizado!`;}jogador.nivel=Math.max(1,1+Math.floor(jogador.pontos/300));await save(true);ui();combate()}
-window.usarPoder=async()=>{const p=poderesBaseLista.find(x=>x.nome===jogador.poder)||poderesBaseLista[0],e=inimigos[alvo],k="hp_"+e.id;let hp=Math.max(0,Number(sessionStorage.getItem(k)??e.vida)-p.dano);sessionStorage.setItem(k,hp);jogador.mana=Math.max(0,jogador.mana-15);if(hp===0){jogador.pontos+=e.pontos;jogador.moedas+=e.moedas;sessionStorage.removeItem(k)}$("combatLog").textContent=`🔥 Poder causou ${p.dano} de dano.`;await save(true);ui();combate()}
-async function ranking(){const s=await get(ref(db,"ranking"));if(!s.exists())return $("rankingList").innerHTML="<p>Nenhum jogador.</p>";let a=[];s.forEach(c=>a.push(c.val()));a.sort((x,y)=>(y.pontos||0)-(x.pontos||0));$("rankingList").innerHTML=a.map((p,i)=>`<div class="rank-row"><div>${i<3?["🥇","🥈","🥉"][i]:"#"+(i+1)}</div><div><b>${esc(p.nome)}</b><br><span class="badge">${esc(p.patente||"Iniciante")}</span> Nível ${p.nivel||1}</div><div class="rank-points">⭐ ${p.pontos||0}</div></div>`).join("")}
-window.ranking=ranking;
-let catalogo=[];
-async function carregarCatalogo(){
- try{
-   const s=await get(ref(db,"catalogo"));
-   catalogo=[];
-   if(s.exists())s.forEach(c=>catalogo.push(c.val()));
-   const personagensExtra=catalogo.filter(x=>x.tipo==="personagem").map(x=>({...x,bonus:Number(x.dano||0)}));
-   const armasExtra=catalogo.filter(x=>x.tipo==="arma").map(x=>({...x,dano:Number(x.dano||0)}));
-   const poderesExtra=catalogo.filter(x=>x.tipo==="poder").map(x=>({...x,dano:Number(x.dano||0)}));
-   window.personagensExtra=personagensExtra;window.armasExtra=armasExtra;window.poderesExtra=poderesExtra;
-   loja();renderPoderes();
- }catch(e){catalogo=[]}
+
+function spawnInitial(){
+  enemies=[];
+  for(let i=0;i<4;i++) spawnEnemy();
 }
-window.recompensa=async()=>{const d=new Date().toISOString().slice(0,10);if(jogador.recompensa===d)return toast("🎁 Já resgatada hoje.");jogador.recompensa=d;jogador.moedas+=100;jogador.pontos+=25;await save(true);toast("🎁 +100 moedas e +25 pontos!")};
-onAuthStateChanged(auth,async u=>{if(u){usuario=u;await carregar()}});signInAnonymously(auth).catch(()=>toast("❌ Ative o login anônimo no Firebase."));
-</script></body></html>
+
+function spawnEnemy(){
+  const side=Math.floor(Math.random()*4);
+  let x=60+Math.random()*(W-120),y=120+Math.random()*(H-180);
+  if(side===0)y=115;if(side===1)y=H-55;if(side===2)x=45;if(side===3)x=W-45;
+  enemies.push({x,y,r:18,hp:40,maxHp:40,speed:45+Math.random()*25,hit:0});
+}
+
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+
+function update(dt){
+  worldTime+=dt;
+  player.attackCooldown=Math.max(0,player.attackCooldown-dt);
+  player.invuln=Math.max(0,player.invuln-dt);
+
+  let dx=(keys["d"]||keys["arrowright"]?1:0)-(keys["a"]||keys["arrowleft"]?1:0);
+  let dy=(keys["s"]||keys["arrowdown"]?1:0)-(keys["w"]||keys["arrowup"]?1:0);
+  if(dx||dy){
+    const len=Math.hypot(dx,dy);dx/=len;dy/=len;
+    player.x+=dx*player.speed*dt;player.y+=dy*player.speed*dt;
+  }
+  player.x=clamp(player.x,35,W-35);player.y=clamp(player.y,100,H-45);
+
+  for(const e of enemies){
+    const d=dist(player,e);
+    if(d>35){e.x+=(player.x-e.x)/d*e.speed*dt;e.y+=(player.y-e.y)/d*e.speed*dt}
+    else if(player.invuln<=0){
+      player.hp--;player.invuln=.7;showMessage("💥 Você levou dano!");
+      if(player.hp<=0) defeat();
+    }
+  }
+
+  for(const e of enemies)e.hit=Math.max(0,e.hit-dt);
+  enemies=enemies.filter(e=>e.hp>0);
+
+  if(!dragon){
+    spawnTimer-=dt;
+    if(spawnTimer<=0 && enemies.length<6){spawnEnemy();spawnTimer=2.2}
+  }else updateDragon(dt);
+
+  for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt}
+  particles=particles.filter(p=>p.life>0);
+}
+
+function attack(){
+  if(player.attackCooldown>0)return;
+  player.attackCooldown=.35;
+  const w=weapons[player.weapon];
+  let target=null,best=90;
+  for(const e of enemies){const d=dist(player,e);if(d<best){best=d;target=e}}
+  if(dragon && dist(player,dragon)<130){hitDragon(w.damage);return}
+  if(target){
+    target.hp-=w.damage;target.hit=.15;
+    burst(target.x,target.y);
+    showMessage("⚔️ Ataque! -"+w.damage);
+    if(target.hp<=0)enemyDefeated(target);
+  }else showMessage("⚔️ Ataque no vazio!");
+}
+
+function enemyDefeated(e){
+  player.coins+=50;player.points+=50;gainXP(25);
+  showMessage("👹 Inimigo derrotado! +50 🪙");
+  burst(e.x,e.y,18);
+}
+
+function power(){
+  if(player.mana<30){showMessage("❌ Mana insuficiente!");return}
+  player.mana-=30;
+  if(dragon && dist(player,dragon)<180){
+    hitDragon(55);
+    showMessage("⚡ RAIO! -55");
+  }else{
+    let count=0;
+    for(const e of enemies)if(dist(player,e)<150){e.hp-=55;count++}
+    enemies=enemies.filter(e=>e.hp>0);
+    player.points+=count*80;
+    burst(player.x,player.y,35);
+    showMessage("⚡ Poder mágico!");
+  }
+}
+
+function hitDragon(damage){
+  if(!dragon)return;
+  dragon.hp-=damage;burst(dragon.x,dragon.y,25);
+  if(dragon.hp<=0)winDragon();
+}
+
+function updateDragon(dt){
+  const d=dist(player,dragon);
+  if(d>110){
+    dragon.x+=(player.x-dragon.x)/d*55*dt;
+    dragon.y+=(player.y-dragon.y)/d*55*dt;
+  }else if(player.invuln<=0){
+    player.hp-=1;player.invuln=1;
+    showMessage("🐉 O dragão atacou!");
+    if(player.hp<=0)defeat();
+  }
+}
+
+function summonDragon(){
+  dragon={x:W/2,y:160,r:62,hp:500,maxHp:500,attack:0};
+  // reforça a música de batalha quando o chefe aparece
+  if(!musicOn) startMusic();
+  enemies=[];
+  closePanel();
+  showMessage("🐉 O DRAGÃO APARECEU!");
+}
+
+function winDragon(){
+  player.coins+=500;player.points+=1000;gainXP(100);
+  dragon=null;
+  showMessage("🏆🐉 VITÓRIA! +500 🪙 +1000 ⭐");
+  burst(W/2,170,80);
+}
+
+function defeat(){
+  player.hp=player.maxHp;
+  dragon=null;
+  showMessage("💀 Você foi derrotado! Vida restaurada.");
+}
+
+function gainXP(n){
+  player.xp+=n;
+  while(player.xp>=100){
+    player.xp-=100;player.level++;
+    player.hp=player.maxHp;
+    player.mana=Math.min(player.maxMana,player.mana+100);
+    showMessage("🆙 SUBIU DE NÍVEL! Nível "+player.level+"!");
+  }
+}
+
+function burst(x,y,n=12){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,s=40+Math.random()*150;
+    particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.5+Math.random()*.5,r:2+Math.random()*4});
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  drawWorld();
+  for(const e of enemies)drawEnemy(e);
+  if(dragon)drawDragon(dragon);
+  drawPlayer();
+  for(const p of particles){
+    ctx.globalAlpha=Math.max(0,p.life*2);
+    ctx.fillStyle="#ffd45a";ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  updateHUD();
+}
+
+function drawWorld(){
+  ctx.fillStyle="#17331f";ctx.fillRect(0,0,W,H);
+  // grama
+  for(let x=0;x<W;x+=40)for(let y=100;y<H;y+=40){
+    ctx.fillStyle=((x/40+y/40)%2===0)?"#1a3821":"#1d3d24";
+    ctx.fillRect(x,y,40,40);
+  }
+  // caminho
+  ctx.fillStyle="#665438";ctx.fillRect(0,H/2-48,W,96);ctx.fillRect(W/2-55,100,110,H-100);
+  // água
+  ctx.fillStyle="#164d68";ctx.fillRect(0,100,85,H-100);
+  // árvores
+  for(let i=0;i<12;i++){
+    const x=100+((i*137)%900),y=125+((i*83)%500);
+    if(Math.abs(x-W/2)<80)continue;
+    ctx.fillStyle="#3a2417";ctx.fillRect(x-6,y+15,12,30);
+    ctx.fillStyle="#174f2a";ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#216b37";ctx.beginPath();ctx.arc(x-12,y+4,18,0,Math.PI*2);ctx.fill();
+  }
+  ctx.fillStyle="#fff";ctx.font="bold 16px Arial";ctx.fillText("DRAGON VALLEY",W/2-65,120);
+}
+
+function drawPlayer(){
+  ctx.save();
+  if(player.invuln>0 && Math.floor(worldTime*12)%2===0)ctx.globalAlpha=.35;
+  // sombra
+  ctx.fillStyle="rgba(0,0,0,.35)";ctx.beginPath();ctx.ellipse(player.x,player.y+23,24,9,0,0,Math.PI*2);ctx.fill();
+  // corpo
+  ctx.fillStyle="#2d7dd2";ctx.fillRect(player.x-14,player.y-8,28,30);
+  // cabeça
+  ctx.fillStyle="#f1c9a5";ctx.beginPath();ctx.arc(player.x,player.y-18,14,0,Math.PI*2);ctx.fill();
+  // cabelo
+  ctx.fillStyle="#552c18";ctx.beginPath();ctx.arc(player.x,player.y-23,14,Math.PI,Math.PI*2);ctx.fill();
+  // espada
+  ctx.strokeStyle="#eee";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(player.x+12,player.y);ctx.lineTo(player.x+35,player.y-25);ctx.stroke();
+  ctx.restore();
+}
+
+function drawEnemy(e){
+  ctx.fillStyle="rgba(0,0,0,.35)";ctx.beginPath();ctx.ellipse(e.x,e.y+20,20,7,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=e.hit>0?"#fff":"#8e2638";ctx.beginPath();ctx.arc(e.x,e.y,19,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#ffdc3d";ctx.beginPath();ctx.arc(e.x-6,e.y-3,3,0,Math.PI*2);ctx.arc(e.x+6,e.y-3,3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#222";ctx.fillRect(e.x-20,e.y-28,40,5);
+  ctx.fillStyle="#e33";ctx.fillRect(e.x-20,e.y-28,40*(e.hp/e.maxHp),5);
+}
+
+function drawDragon(d){
+  ctx.save();
+  ctx.translate(d.x,d.y);
+  ctx.fillStyle="rgba(0,0,0,.4)";ctx.beginPath();ctx.ellipse(0,55,65,15,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#7a1e2b";ctx.beginPath();ctx.ellipse(0,0,58,48,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#b83245";ctx.beginPath();ctx.arc(0,-40,38,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#f0c73d";ctx.beginPath();ctx.arc(-13,-45,5,0,Math.PI*2);ctx.arc(13,-45,5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#d54b59";
+  ctx.beginPath();ctx.moveTo(-38,-12);ctx.lineTo(-95,-65);ctx.lineTo(-55,5);ctx.fill();
+  ctx.beginPath();ctx.moveTo(38,-12);ctx.lineTo(95,-65);ctx.lineTo(55,5);ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="bold 16px Arial";ctx.textAlign="center";ctx.fillText("DRAGÃO",0,78);
+  ctx.restore();
+  ctx.fillStyle="#222";ctx.fillRect(d.x-65,d.y-85,130,9);
+  ctx.fillStyle="#e33";ctx.fillRect(d.x-65,d.y-85,130*Math.max(0,d.hp/d.maxHp),9);
+}
+
+function updateHUD(){
+  document.getElementById("hpText").textContent=player.hp+"/"+player.maxHp;
+  document.getElementById("manaText").textContent=player.mana+"/"+player.maxMana;
+  document.getElementById("xpText").textContent=player.xp+"/100";
+  document.getElementById("levelText").textContent=player.level;
+  document.getElementById("coinText").textContent=player.coins;
+  document.getElementById("pointText").textContent=player.points;
+  document.getElementById("weaponText").textContent=player.weapon;
+  document.getElementById("hpBar").style.width=(player.hp/player.maxHp*100)+"%";
+  document.getElementById("manaBar").style.width=(player.mana/player.maxMana*100)+"%";
+  document.getElementById("xpBar").style.width=(player.xp/100*100)+"%";
+}
+
+function showMessage(t){
+  const m=document.getElementById("message");m.textContent=t;m.style.opacity=1;
+  clearTimeout(messageTimer);messageTimer=setTimeout(()=>m.style.opacity=0,1800);
+}
+
+function openMenu(){
+  if(!running)return;
+  document.getElementById("panelBox").innerHTML=`
+    <h2>☰ MENU</h2>
+    <div class="grid">
+      <button onclick="openShop()">🛒 Loja</button>
+      <button class="red" onclick="summonDragon()">🐉 Dragão</button>
+      <button class="blue" onclick="openPowers()">🔥 Poderes</button>
+      <button class="blue" onclick="saveGame()">💾 Salvar</button>
+      <button onclick="loadGame()">↩️ Carregar</button>
+      <button onclick="newGame()">🔄 Novo jogo</button>
+      <button onclick="closePanel()">▶ Continuar</button>
+    </div>
+  `;
+  document.getElementById("panel").style.display="flex";
+}
+
+function openShop(){
+  let s="<h2>🛒 LOJA</h2><div class='grid'>";
+  for(const n in weapons){
+    if(n==="Faca")continue;
+    const w=weapons[n];
+    s+=`<div class="item"><b>${w.icon} ${n}</b><br>Dano: ${w.damage}<br>Preço: ${w.price} 🪙<br><button class="gold" onclick="buyWeapon('${n}')">Comprar</button></div>`;
+  }
+  s+=`<div class="item"><b>🔵 +100 Mana</b><br>Preço: 300 🪙<br><button class="blue" onclick="buyMana()">Comprar</button></div>`;
+  s+=`<div class="item"><b>❤️ +1 Vida máxima</b><br>Preço: 200 🪙<br><button class="red" onclick="buyLife()">Comprar</button></div>`;
+  s+="</div><button onclick='openMenu()'>↩️ Voltar</button>";
+  document.getElementById("panelBox").innerHTML=s;
+  document.getElementById("panel").style.display="flex";
+}
+
+function buyWeapon(n){
+  const w=weapons[n];
+  if(player.coins<w.price){showMessage("❌ Moedas insuficientes!");return}
+  player.coins-=w.price;player.weapon=n;showMessage("✅ "+n+" equipada!");
+  openShop();
+}
+function buyMana(){
+  if(player.coins<300){showMessage("❌ Moedas insuficientes!");return}
+  player.coins-=300;player.mana=Math.min(player.maxMana,player.mana+100);
+  showMessage("🔵 Mana aumentada!");
+  openShop();
+}
+function buyLife(){
+  if(player.coins<200){showMessage("❌ Moedas insuficientes!");return}
+  player.coins-=200;player.maxHp++;player.hp=player.maxHp;
+  showMessage("❤️ Vida máxima aumentada!");
+  openShop();
+}
+
+function openPowers(){
+  document.getElementById("panelBox").innerHTML=`
+  <h2>🔥 PODERES</h2>
+  <div class="grid">
+    <div class="item">⚡ <b>Raio</b><br>30 mana<br><button class="red" onclick="power();closePanel()">Usar</button></div>
+    <div class="item">❤️ <b>Cura</b><br>25 mana<br><button class="blue" onclick="heal();closePanel()">Usar</button></div>
+    <div class="item">💥 <b>Explosão</b><br>50 mana<br><button class="red" onclick="explosion();closePanel()">Usar</button></div>
+  </div>
+  <button onclick="openMenu()">↩️ Voltar</button>`;
+  document.getElementById("panel").style.display="flex";
+}
+function heal(){
+  if(player.mana<25){showMessage("❌ Mana insuficiente!");return}
+  player.mana-=25;player.hp=Math.min(player.maxHp,player.hp+1);showMessage("❤️ Vida recuperada!");
+}
+function explosion(){
+  if(player.mana<50){showMessage("❌ Mana insuficiente!");return}
+  player.mana-=50;
+  let n=0;
+  for(const e of enemies)if(dist(player,e)<180){e.hp=0;n++}
+  enemies=enemies.filter(e=>e.hp>0);
+  player.coins+=100;player.points+=300;burst(player.x,player.y,50);
+  showMessage("💥 EXPLOSÃO! +100 🪙");
+}
+
+function closePanel(){document.getElementById("panel").style.display="none"}
+function saveGame(){
+  const data={...player};
+  localStorage.setItem("dragonWar2D",JSON.stringify(data));
+  showMessage("💾 Jogo salvo!");
+  closePanel();
+}
+function loadGame(){
+  const raw=localStorage.getItem("dragonWar2D");
+  if(!raw){showMessage("❌ Nenhum save encontrado.");return}
+  const d=JSON.parse(raw);
+  for(const k of Object.keys(player))if(d[k]!==undefined)player[k]=d[k];
+  showMessage("↩️ Jogo carregado!");
+  closePanel();
+}
+function newGame(){
+  if(!confirm("Começar um novo jogo?"))return;
+  player.x=W/2;player.y=H/2+80;player.hp=5;player.maxHp=5;player.mana=500;player.maxMana=500;
+  player.coins=10000;player.points=0;player.level=1;player.xp=0;player.weapon="Faca";
+  enemies=[];dragon=null;spawnInitial();closePanel();showMessage("🔥 Novo jogo iniciado!");
+}
+
+function loop(t){
+  if(!running)return;
+  const dt=Math.min(.033,(t-last)/1000||0);last=t;
+  update(dt);draw();requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

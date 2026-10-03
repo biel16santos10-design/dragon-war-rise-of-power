@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7c3aed">
+<link rel="manifest" href="manifest.json">
 <title>Dragon War: Rise of Power</title>
 
 <style>
@@ -11,441 +12,627 @@
 
 body{
  margin:0;
- font-family:Arial,sans-serif;
- background:#05070b;
- color:#fff;
  min-height:100vh;
+ background:
+ radial-gradient(circle at top,#182044,#05070b 55%);
+ color:#fff;
+ font-family:Arial,Helvetica,sans-serif;
 }
 
 button{
  border:0;
- border-radius:12px;
- padding:12px 18px;
- margin:5px;
  cursor:pointer;
- font-weight:bold;
- font-size:15px;
+ font-weight:800;
+ color:white;
 }
 
-button:hover{filter:brightness(1.15)}
+#app{
+ max-width:1200px;
+ margin:auto;
+ padding:15px;
+}
 
 .tela{
- min-height:100vh;
- padding:20px;
+ display:none;
 }
 
-.inicio{
- display:flex;
- flex-direction:column;
- justify-content:center;
- align-items:center;
+.tela.ativa{
+ display:block;
+}
+
+header{
  text-align:center;
- background:
- radial-gradient(circle at center,#26104d 0,#090712 45%,#020306 100%);
+ padding:18px 10px;
 }
 
 .logo{
- font-size:70px;
- margin-bottom:10px;
+ font-size:clamp(28px,6vw,58px);
+ font-weight:1000;
+ background:linear-gradient(90deg,#ff2b2b,#ffb000,#fff,#7c3aed,#00eaff);
+ background-size:300% 100%;
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+ animation:logo 4s linear infinite;
+ text-shadow:0 0 25px #7c3aed;
 }
 
-h1{
- color:#ffb300;
- text-shadow:0 0 20px #ff5e00;
+@keyframes logo{
+ 0%{background-position:0%}
+ 100%{background-position:300%}
 }
 
-.subtitulo{
- color:#bbb;
- margin-bottom:30px;
+/* SEU NOME */
+.nome-dono{
+ font-size:1.35em;
+ font-weight:1000;
+ background:linear-gradient(
+   90deg,
+   #ff1744,
+   #ff9800,
+   #ffee00,
+   #00ff88,
+   #00eaff,
+   #7c3aed,
+   #ff00d4,
+   #ff1744
+ );
+ background-size:400% 100%;
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+ animation:nomeRainbow 3s linear infinite;
+ text-shadow:0 0 15px rgba(0,234,255,.5);
 }
 
-.jogar{
- font-size:22px;
- background:#ff7b00;
+@keyframes nomeRainbow{
+ 0%{background-position:0% 50%}
+ 100%{background-position:400% 50%}
+}
+
+.nome-normal{
  color:#fff;
- padding:18px 45px;
- box-shadow:0 0 25px #ff5e00;
+ font-weight:800;
 }
 
-.caixa-atualizacao{
- max-width:500px;
- margin-top:30px;
- padding:15px;
- border:1px solid #6337b5;
- border-radius:15px;
- background:#11101d;
+.card{
+ background:rgba(10,15,30,.88);
+ border:1px solid #3f4d72;
+ border-radius:20px;
+ padding:20px;
+ margin:15px 0;
+ box-shadow:0 0 25px rgba(0,0,0,.35);
 }
 
-.versao{
- color:#8dff8d;
+.menu{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+ gap:12px;
 }
 
-.oculto{display:none!important}
+.btn{
+ padding:16px;
+ border-radius:14px;
+ font-size:17px;
+ background:linear-gradient(135deg,#202b50,#10162c);
+ border:2px solid #596b9d;
+ transition:.2s;
+}
+
+.btn:hover{
+ transform:translateY(-2px);
+ filter:brightness(1.25);
+}
+
+.btn-jogar{border-color:#ffb300}
+.btn-loja{border-color:#00bfff}
+.btn-combate{border-color:#ff3b5c}
+.btn-poder{border-color:#c83cff}
+.btn-salvar{border-color:#00e676}
+.btn-carregar{border-color:#00eaff}
+.btn-novo{border-color:#aaa}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+ gap:10px;
+}
+
+.stat{
+ background:#0c1224;
+ border:1px solid #36456e;
+ border-radius:12px;
+ padding:12px;
+ text-align:center;
+}
+
+.valor{
+ display:block;
+ font-size:23px;
+ font-weight:900;
+ margin-top:5px;
+}
+
+.grade{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:15px;
+}
+
+.produto{
+ background:#10172d;
+ border:2px solid #36456e;
+ border-radius:18px;
+ padding:18px;
+ text-align:center;
+}
+
+.produto .emoji{
+ font-size:55px;
+ margin:8px;
+}
+
+.preco{
+ color:#ffd740;
+ font-size:20px;
+ font-weight:900;
+ margin:10px;
+}
 
 .topo{
  display:flex;
  justify-content:space-between;
  align-items:center;
- flex-wrap:wrap;
  gap:10px;
- margin-bottom:15px;
-}
-
-.painel{
- background:#10131c;
- border:1px solid #252b3b;
- border-radius:18px;
- padding:18px;
- margin-bottom:15px;
- box-shadow:0 5px 25px #0008;
-}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
- gap:10px;
-}
-
-.stat{
- background:#171b27;
- padding:12px;
- border-radius:12px;
- text-align:center;
-}
-
-.stat b{
- display:block;
- color:#ffbf4a;
- font-size:20px;
-}
-
-.menu{
- display:flex;
  flex-wrap:wrap;
- gap:5px;
 }
 
-.menu button{
- background:#20283a;
- color:white;
+.voltar{
+ background:#26304c;
+ padding:10px 16px;
+ border-radius:10px;
 }
 
-.btn-verde{background:#159447;color:#fff}
-.btn-vermelho{background:#a52222;color:#fff}
-.btn-roxo{background:#663bb3;color:#fff}
-.btn-laranja{background:#d86c00;color:#fff}
-.btn-azul{background:#1769aa;color:#fff}
-
-.log{
- min-height:70px;
- background:#080a10;
- padding:12px;
- border-radius:12px;
- color:#bfc7d8;
-}
-
-.cards{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
- gap:12px;
-}
-
-.card{
- background:#171b27;
- padding:15px;
- border-radius:15px;
- border:1px solid #2b3245;
-}
-
-.card h3{margin-top:0;color:#ffb84d}
-
-input,select{
+input{
  width:100%;
- padding:12px;
+ padding:14px;
  border-radius:10px;
- border:1px solid #3a4255;
- background:#080a10;
+ border:2px solid #42527e;
+ background:#070b16;
  color:#fff;
- margin:5px 0 10px;
+ font-size:16px;
+ margin:8px 0;
 }
 
-.modal{
- position:fixed;
- inset:0;
- background:#000b;
+#rankingLista{
+ display:flex;
+ flex-direction:column;
+ gap:10px;
+}
+
+.rank{
  display:flex;
  align-items:center;
- justify-content:center;
- padding:20px;
- z-index:50;
+ gap:12px;
+ padding:13px;
+ border-radius:13px;
+ background:#0d1428;
+ border:1px solid #293858;
 }
 
-.modal-box{
- width:min(600px,100%);
- max-height:90vh;
- overflow:auto;
- background:#111521;
- border:1px solid #39425a;
- border-radius:20px;
- padding:20px;
+.pos{
+ width:40px;
+ font-size:20px;
+ font-weight:900;
 }
 
-.ranking-item{
- display:flex;
- justify-content:space-between;
- align-items:center;
- padding:12px;
- margin:6px 0;
- background:#171b27;
- border-radius:10px;
-}
-
-#mensagem{
- position:fixed;
- bottom:15px;
- left:50%;
- transform:translateX(-50%);
- background:#111;
- border:1px solid #555;
- padding:12px 20px;
- border-radius:12px;
- z-index:100;
- display:none;
-}
-
-.pequeno{
- color:#8992a5;
- font-size:12px;
+.rank-pontos{
+ margin-left:auto;
+ color:#ffd740;
+ font-weight:900;
 }
 
 .barra{
- height:12px;
- background:#252936;
+ height:16px;
+ background:#11182c;
  border-radius:20px;
  overflow:hidden;
+ margin-top:8px;
 }
 
 .barra div{
  height:100%;
- background:#e43b3b;
- width:100%;
+ background:linear-gradient(90deg,#00eaff,#7c3aed);
+ width:50%;
+}
+
+.log{
+ min-height:30px;
+ text-align:center;
+ padding:10px;
+ color:#aeefff;
+}
+
+.batalha{
+ text-align:center;
+}
+
+.inimigo{
+ font-size:90px;
+}
+
+.ataque{
+ background:linear-gradient(135deg,#ff1744,#8e0015);
+ padding:18px 30px;
+ border-radius:15px;
+ font-size:20px;
+ margin:8px;
+}
+
+.poder-btn{
+ background:linear-gradient(135deg,#a000ff,#4c00a8);
+ padding:15px;
+ border-radius:12px;
+}
+
+#mensagem{
+ position:fixed;
+ left:50%;
+ bottom:20px;
+ transform:translateX(-50%);
+ background:#111a32;
+ border:1px solid #5b6fa8;
+ padding:14px 20px;
+ border-radius:12px;
+ display:none;
+ z-index:9999;
+}
+
+.pequeno{
+ opacity:.75;
+ font-size:13px;
 }
 
 @media(max-width:600px){
- .logo{font-size:55px}
- h1{font-size:25px}
- .tela{padding:12px}
+ #app{padding:8px}
+ .card{padding:14px}
+ .btn{font-size:15px;padding:14px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= INÍCIO ================= -->
+<div id="app">
 
-<section id="telaInicio" class="tela inicio">
+<!-- ================= TELA INICIAL ================= -->
 
- <div class="logo">🐉⚔️</div>
+<section id="inicio" class="tela ativa">
 
- <h1>🔥 Dragon War: Rise of Power 🔥</h1>
+<header>
+<div class="logo">🔥 DRAGON WAR 🔥</div>
+<h2>RISE OF POWER</h2>
+</header>
 
- <div class="subtitulo">
-  Uma batalha pelo poder começa agora.
- </div>
+<div class="card" style="text-align:center">
 
- <button class="jogar" onclick="iniciarJogo()">
-  ▶ JOGAR
- </button>
+<div style="font-size:100px">🐉</div>
 
- <div class="caixa-atualizacao">
-  <div class="versao">Versão 2.0.0</div>
-  <h3>🚀 Dragon War 2.0</h3>
-  <p>
-   Ranking global atualizado, painel administrativo,
-   múltiplos administradores e sistema de atualização.
-  </p>
- </div>
+<h1>
+<span class="nome-dono">Gabriel Cabral</span>
+</h1>
 
- <p class="pequeno">🎮 Desenvolvido por Gabriel Cabral</p>
+<p>Jogue, evolua e domine.</p>
+
+<button class="btn btn-jogar" onclick="abrirTela('jogo')">
+⚔️ JOGAR
+</button>
+
+</div>
+
+<div class="card">
+<div class="stats">
+<div class="stat">❤️ Vida<span id="iVida" class="valor">100</span></div>
+<div class="stat">💧 Mana<span id="iMana" class="valor">100</span></div>
+<div class="stat">⭐ Pontos<span id="iPontos" class="valor">0</span></div>
+<div class="stat">🪙 Moedas<span id="iMoedas" class="valor">500</span></div>
+<div class="stat">🏆 Nível<span id="iNivel" class="valor">1</span></div>
+</div>
+</div>
+
+<div class="card">
+<p><b>Dragon War: Rise of Power</b></p>
+<p class="pequeno">Versão 3.0.0</p>
+</div>
 
 </section>
 
 
 <!-- ================= JOGO ================= -->
 
-<section id="telaJogo" class="tela oculto">
+<section id="jogo" class="tela">
 
- <div class="topo">
-  <div>
-   <h2>🐉 Dragon War</h2>
-   <span class="pequeno" id="uidTexto">Conectando...</span>
-  </div>
+<div class="topo">
+<h1>⚔️ Dragon War</h1>
+<button class="voltar" onclick="abrirTela('inicio')">🏠 Início</button>
+</div>
 
-  <div>
-   <button class="btn-roxo" onclick="abrirRanking()">🏆 Ranking</button>
-   <button class="btn-verde" onclick="salvarJogo()">💾 Salvar</button>
-   <button class="btn-vermelho" onclick="voltarInicio()">↩ Sair</button>
-  </div>
- </div>
+<div class="card">
 
+<h2>👑 <span class="nome-dono">Gabriel Cabral</span></h2>
 
- <!-- STATS -->
+<div class="stats">
 
- <div class="painel">
-  <div class="stats">
+<div class="stat">
+❤️ Vida
+<span id="vida" class="valor">100</span>
+</div>
 
-   <div class="stat">
-    ❤️ Vida
-    <b id="vida">100</b>
-   </div>
+<div class="stat">
+💧 Mana
+<span id="mana" class="valor">100</span>
+</div>
 
-   <div class="stat">
-    🔵 Mana
-    <b id="mana">100</b>
-   </div>
+<div class="stat">
+⭐ Pontos
+<span id="pontos" class="valor">0</span>
+</div>
 
-   <div class="stat">
-    ⭐ Pontos
-    <b id="pontos">0</b>
-   </div>
+<div class="stat">
+🪙 Moedas
+<span id="moedas" class="valor">500</span>
+</div>
 
-   <div class="stat">
-    🪙 Moedas
-    <b id="moedas">100</b>
-   </div>
+<div class="stat">
+🏆 Nível
+<span id="nivel" class="valor">1</span>
+</div>
 
-   <div class="stat">
-    🗡️ Arma
-    <b id="arma">Espada de Ferro</b>
-   </div>
+<div class="stat">
+👤 Personagem
+<span id="personagem" class="valor">Guerreiro</span>
+</div>
 
-   <div class="stat">
-    🧙 Personagem
-    <b id="personagem">Guerreiro</b>
-   </div>
+</div>
 
-   <div class="stat">
-    📈 Nível
-    <b id="nivel">1</b>
-   </div>
+</div>
 
-  </div>
- </div>
+<div class="menu">
 
+<button class="btn btn-loja" onclick="abrirTela('loja')">
+🛒 LOJA
+</button>
 
- <!-- MENU -->
+<button class="btn btn-combate" onclick="abrirTela('combate')">
+⚔️ COMBATE
+</button>
 
- <div class="painel">
+<button class="btn btn-salvar" onclick="salvarJogo()">
+💾 SALVAR
+</button>
 
-  <div class="menu">
+<button class="btn btn-carregar" onclick="carregarJogo()">
+📂 CARREGAR
+</button>
 
-   <button class="btn-laranja" onclick="aventura()">
-    ⚔️ Aventura
-   </button>
+<button class="btn btn-novo" onclick="novoJogo()">
+🆕 NOVO JOGO
+</button>
 
-   <button onclick="abrirLoja()">
-    🛒 Loja
-   </button>
+<button class="btn" onclick="abrirTela('ranking')">
+🏆 RANKING GLOBAL
+</button>
 
-   <button onclick="abrirPoderes()">
-    🔮 Poderes
-   </button>
+<button class="btn" onclick="editarNome()">
+👤 MEU NOME
+</button>
 
-   <button class="btn-vermelho" onclick="batalharDragao()">
-    🐲 Dragão
-   </button>
+</div>
 
-   <button class="btn-roxo" onclick="batalharReiDemonio()">
-    👹 Rei Demônio
-   </button>
-
-   <button class="btn-azul" onclick="escolherPersonagem()">
-    👤 Personagem
-   </button>
-
-   <button onclick="editarNome()">
-    ✏️ Nome
-   </button>
-
-   <button onclick="carregarJogo()">
-    📂 Carregar
-   </button>
-
-   <button onclick="novoJogo()">
-    🔄 Novo jogo
-   </button>
-
-   <button id="btnAdmin" class="btn-vermelho oculto" onclick="abrirAdmin()">
-    🛡️ ADM
-   </button>
-
-  </div>
-
- </div>
-
-
- <!-- BATALHA -->
-
- <div class="painel">
-
-  <h3>⚔️ Batalha</h3>
-
-  <div class="barra">
-   <div id="barraVida"></div>
-  </div>
-
-  <p id="inimigoTexto">
-   Nenhum inimigo encontrado.
-  </p>
-
-  <div id="log" class="log">
-   Bem-vindo ao Dragon War!
-  </div>
-
- </div>
-
-
- <!-- PERFIL -->
-
- <div class="painel">
-
-  <h3>👤 Perfil</h3>
-
-  <p>
-   Jogador:
-   <b id="nomeJogador">Jogador</b>
-  </p>
-
-  <p class="pequeno">
-   Seus pontos e nível são enviados para o ranking global.
-  </p>
-
- </div>
+<div class="card">
+<h2>🎒 Seu personagem</h2>
+<p>Personagem atual: <b id="personagem2">Guerreiro</b></p>
+<p>Arma: <b id="arma">Espada de Ferro</b></p>
+<p>Poder: <b id="poderAtual">Nenhum</b></p>
+</div>
 
 </section>
 
 
-<!-- ================= MODAL ================= -->
+<!-- ================= LOJA ================= -->
 
-<div id="modal" class="modal oculto">
+<section id="loja" class="tela">
 
- <div class="modal-box">
+<div class="topo">
+<h1>🛒 Loja</h1>
+<button class="voltar" onclick="abrirTela('jogo')">↩️ Voltar</button>
+</div>
 
-  <div id="modalConteudo"></div>
+<div class="card">
+<h2>🪙 Suas moedas: <span id="lojaMoedas">500</span></h2>
+</div>
 
-  <button class="btn-vermelho" onclick="fecharModal()">
-   Fechar
-  </button>
+<h2>👤 Personagens</h2>
 
- </div>
+<div class="grade">
+
+<div class="produto">
+<div class="emoji">⚔️</div>
+<h2>Guerreiro</h2>
+<p>Forte no combate físico.</p>
+<div class="preco">GRÁTIS</div>
+<button class="btn" onclick="comprarPersonagem('Guerreiro',0)">
+Escolher
+</button>
+</div>
+
+<div class="produto">
+<div class="emoji">🧙</div>
+<h2>Mago</h2>
+<p>Grande poder mágico.</p>
+<div class="preco">🪙 300</div>
+<button class="btn" onclick="comprarPersonagem('Mago',300)">
+Comprar
+</button>
+</div>
+
+<div class="produto">
+<div class="emoji">🥷</div>
+<h2>Ninja</h2>
+<p>Rápido e poderoso.</p>
+<div class="preco">🪙 600</div>
+<button class="btn" onclick="comprarPersonagem('Ninja',600)">
+Comprar
+</button>
+</div>
 
 </div>
 
+<h2>🔥 Poderes</h2>
+
+<div class="grade">
+
+<div class="produto">
+<div class="emoji">🔥</div>
+<h2>Fogo do Dragão</h2>
+<p>Aumenta o dano.</p>
+<div class="preco">🪙 250</div>
+<button class="poder-btn" onclick="comprarPoder('Fogo do Dragão',250)">
+Comprar
+</button>
+</div>
+
+<div class="produto">
+<div class="emoji">⚡</div>
+<h2>Raio Divino</h2>
+<p>Golpe elétrico poderoso.</p>
+<div class="preco">🪙 450</div>
+<button class="poder-btn" onclick="comprarPoder('Raio Divino',450)">
+Comprar
+</button>
+</div>
+
+<div class="produto">
+<div class="emoji">🌌</div>
+<h2>Explosão Cósmica</h2>
+<p>Poder lendário.</p>
+<div class="preco">🪙 800</div>
+<button class="poder-btn" onclick="comprarPoder('Explosão Cósmica',800)">
+Comprar
+</button>
+</div>
+
+</div>
+
+<h2>⚔️ Armas</h2>
+
+<div class="grade">
+
+<div class="produto">
+<div class="emoji">🗡️</div>
+<h2>Espada de Ferro</h2>
+<div class="preco">🪙 100</div>
+<button class="btn" onclick="comprarArma('Espada de Ferro',100)">
+Comprar
+</button>
+</div>
+
+<div class="produto">
+<div class="emoji">⚔️</div>
+<h2>Lâmina do Dragão</h2>
+<div class="preco">🪙 500</div>
+<button class="btn" onclick="comprarArma('Lâmina do Dragão',500)">
+Comprar
+</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= COMBATE ================= -->
+
+<section id="combate" class="tela">
+
+<div class="topo">
+<h1>⚔️ Combate</h1>
+<button class="voltar" onclick="abrirTela('jogo')">↩️ Voltar</button>
+</div>
+
+<div class="card batalha">
+
+<h2>🐉 Dragão Sombrio</h2>
+
+<div class="inimigo">🐉</div>
+
+<p>Vida do inimigo:</p>
+
+<div class="barra">
+<div id="barraInimigo" style="width:100%"></div>
+</div>
+
+<h2 id="vidaInimigo">100</h2>
+
+<button class="ataque" onclick="atacar()">
+⚔️ ATACAR
+</button>
+
+<button class="poder-btn" onclick="usarPoder()">
+🔥 USAR PODER
+</button>
+
+<div id="resultadoCombate" class="log">
+Prepare-se para lutar!
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= RANKING ================= -->
+
+<section id="ranking" class="tela">
+
+<div class="topo">
+<h1>🏆 Ranking Global</h1>
+<button class="voltar" onclick="abrirTela('jogo')">↩️ Voltar</button>
+</div>
+
+<div class="card">
+
+<h2>🌎 Jogadores</h2>
+
+<div id="rankingLista">
+Carregando ranking...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= UID ================= -->
+
+<section id="uid" class="tela">
+
+<div class="topo">
+<h1>🆔 Meu UID</h1>
+<button class="voltar" onclick="abrirTela('jogo')">↩️ Voltar</button>
+</div>
+
+<div class="card">
+<p>Seu identificador:</p>
+<h2 id="meuUID">Carregando...</h2>
+</div>
+
+</section>
+
+</div>
 
 <div id="mensagem"></div>
 
-
-<!-- ================= FIREBASE ================= -->
 
 <script type="module">
 
@@ -454,8 +641,8 @@ from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
  getAuth,
- onAuthStateChanged,
- signInAnonymously
+ signInAnonymously,
+ onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
@@ -465,18 +652,15 @@ import {
  set,
  get,
  update,
- remove,
- query,
- orderByChild,
- limitToLast
+ onValue
 }
 from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 
-/* ================= CONFIGURAÇÃO ================= */
+/* ================= FIREBASE ================= */
 
 const firebaseConfig={
- apiKey:"AIzaSyDA_kn3eNR9RD2P6WDCNbUxBKldoIn9Sys",
+ apiKey:"AIzaSyDA_kn3eNRD9P2D6WDCNbUxBKld0i9Sys",
  authDomain:"dragon-war-rise-of-power.firebaseapp.com",
  databaseURL:"https://dragon-war-rise-of-power-default-rtdb.firebaseio.com",
  projectId:"dragon-war-rise-of-power",
@@ -486,248 +670,266 @@ const firebaseConfig={
  measurementId:"G-PY4TRBXZ8N"
 };
 
-
-/* ================= VERSÃO ================= */
-
-const VERSAO_ATUAL="2.0.0";
-
-const ATUALIZACAO={
- versao:"2.0.0",
- titulo:"Dragon War 2.0",
- texto:"Novo painel ADM, múltiplos administradores, ranking global atualizado e melhorias no jogo."
-};
-
-
-/* ================= ADMINS ================= */
-
-const ADMIN_UIDS=[
- "w2aAcmul8vYJOR05lGLQThAsiTg2"
-];
-
-
-/*
- Para adicionar outro ADM:
-
- ADMIN_UIDS.push("UID_DO_NOVO_ADMIN");
-
-*/
-
-
-/* ================= FIREBASE ================= */
-
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getDatabase(app);
 
-
-/* ================= VARIÁVEIS ================= */
-
 let usuarioFirebase=null;
-let nome="Jogador";
+
+
+/* ================= DADOS ================= */
 
 let jogador={
+ nome:"Gabriel Cabral",
  vida:100,
  mana:100,
  pontos:0,
- moedas:100,
+ moedas:500,
  nivel:1,
+ personagem:"Guerreiro",
  arma:"Espada de Ferro",
- personagem:"Guerreiro"
+ poder:"Nenhum",
+ inimigo:100
 };
 
 
-/* ================= ELEMENTOS ================= */
+/* ================= TELA ================= */
 
-const el=id=>document.getElementById(id);
+window.abrirTela=function(id){
+
+ document.querySelectorAll(".tela")
+ .forEach(t=>t.classList.remove("ativa"));
+
+ const tela=document.getElementById(id);
+
+ if(tela){
+   tela.classList.add("ativa");
+ }
+
+ atualizarTela();
+
+ if(id==="ranking"){
+   carregarRanking();
+ }
+
+};
 
 
 /* ================= MENSAGEM ================= */
 
 function mensagem(txt){
 
- const m=el("mensagem");
+ const m=document.getElementById("mensagem");
 
  m.textContent=txt;
  m.style.display="block";
 
  setTimeout(()=>{
-  m.style.display="none";
+   m.style.display="none";
  },2500);
-}
-
-
-/* ================= LOGIN ================= */
-
-signInAnonymously(auth).catch(e=>{
- console.error(e);
- mensagem("❌ Erro ao conectar ao Firebase.");
-});
-
-
-onAuthStateChanged(auth,async user=>{
-
- if(!user)return;
-
- usuarioFirebase=user;
-
- el("uidTexto").textContent="UID: "+user.uid;
-
- if(ehAdmin()){
-  el("btnAdmin").classList.remove("oculto");
- }
-
- await carregarDadosAutomaticamente();
-
-});
-
-
-/* ================= ADMIN ================= */
-
-function ehAdmin(){
-
- return !!(
-  usuarioFirebase &&
-  ADMIN_UIDS.includes(usuarioFirebase.uid)
- );
 
 }
 
 
-/* ================= INICIAR ================= */
-
-window.iniciarJogo=function(){
-
- el("telaInicio").classList.add("oculto");
- el("telaJogo").classList.remove("oculto");
-
- atualizarTela();
-
-};
-
-
-/* ================= VOLTAR ================= */
-
-window.voltarInicio=function(){
-
- salvarJogo();
-
- el("telaJogo").classList.add("oculto");
- el("telaInicio").classList.remove("oculto");
-
-};
-
-
-/* ================= ATUALIZAR TELA ================= */
+/* ================= ATUALIZAR ================= */
 
 function atualizarTela(){
 
- el("vida").textContent=jogador.vida;
- el("mana").textContent=jogador.mana;
- el("pontos").textContent=jogador.pontos;
- el("moedas").textContent=jogador.moedas;
- el("nivel").textContent=jogador.nivel;
- el("arma").textContent=jogador.arma;
- el("personagem").textContent=jogador.personagem;
- el("nomeJogador").textContent=nome;
+ const ids={
+  vida:jogador.vida,
+  mana:jogador.mana,
+  pontos:jogador.pontos,
+  moedas:jogador.moedas,
+  nivel:jogador.nivel,
+  personagem:jogador.personagem,
+  personagem2:jogador.personagem,
+  arma:jogador.arma,
+  poderAtual:jogador.poder,
+  lojaMoedas:jogador.moedas,
+  iVida:jogador.vida,
+  iMana:jogador.mana,
+  iPontos:jogador.pontos,
+  iMoedas:jogador.moedas,
+  iNivel:jogador.nivel
+ };
 
- let porcentagem=Math.max(0,Math.min(100,jogador.vida));
+ for(const id in ids){
 
- el("barraVida").style.width=porcentagem+"%";
+   const elemento=document.getElementById(id);
+
+   if(elemento){
+     elemento.textContent=ids[id];
+   }
+
+ }
+
+ const inimigo=document.getElementById("vidaInimigo");
+
+ if(inimigo){
+   inimigo.textContent=Math.max(0,jogador.inimigo);
+ }
+
+ const barra=document.getElementById("barraInimigo");
+
+ if(barra){
+   barra.style.width=Math.max(0,jogador.inimigo)+"%";
+ }
 
 }
 
 
-/* ================= SALVAR ================= */
+/* ================= AUTENTICAÇÃO ================= */
 
-window.salvarJogo=async function(){
+signInAnonymously(auth)
+.catch(e=>{
+ console.error(e);
+ mensagem("Erro ao entrar no jogo.");
+});
 
- if(!usuarioFirebase){
-  mensagem("⏳ Conectando ao Firebase...");
-  return;
- }
+
+onAuthStateChanged(auth,async usuario=>{
+
+ usuarioFirebase=usuario;
+
+ if(!usuario) return;
+
+ document.getElementById("meuUID").textContent=usuario.uid;
+
+ await carregarDados();
+
+ atualizarTela();
+
+ carregarRanking();
+
+});
+
+
+/* ================= SALVAR FIREBASE ================= */
+
+async function salvarFirebase(){
+
+ if(!usuarioFirebase) return;
 
  try{
 
-  const dados={
-   ...jogador,
-   nome:nome,
-   uid:usuarioFirebase.uid,
-   versao:VERSAO_ATUAL,
-   atualizadoEm:Date.now()
-  };
+   const dados={
+     nome:"Gabriel Cabral",
+     nomeColorido:true,
+     vida:jogador.vida,
+     mana:jogador.mana,
+     pontos:jogador.pontos,
+     moedas:jogador.moedas,
+     nivel:jogador.nivel,
+     personagem:jogador.personagem,
+     arma:jogador.arma,
+     poder:jogador.poder,
+     atualizado:Date.now()
+   };
 
-  await set(
-   ref(db,"jogadores/"+usuarioFirebase.uid),
-   dados
-  );
+   await update(
+     ref(db,"jogadores/"+usuarioFirebase.uid),
+     dados
+   );
 
-  await set(
-   ref(db,"ranking/"+usuarioFirebase.uid),
-   {
-    uid:usuarioFirebase.uid,
-    nome:nome,
-    pontos:jogador.pontos,
-    nivel:jogador.nivel,
-    personagem:jogador.personagem,
-    atualizadoEm:Date.now()
-   }
-  );
-
-  mensagem("✅ Jogo salvo!");
+   await update(
+     ref(db,"ranking/"+usuarioFirebase.uid),
+     {
+       uid:usuarioFirebase.uid,
+       nome:"Gabriel Cabral",
+       nomeColorido:true,
+       pontos:jogador.pontos,
+       nivel:jogador.nivel
+     }
+   );
 
  }catch(e){
 
-  console.error(e);
-  mensagem("❌ Não foi possível salvar.");
+   console.error(e);
+   mensagem("⚠️ Não foi possível salvar online.");
 
  }
 
-};
+}
 
 
 /* ================= CARREGAR ================= */
 
-async function carregarDadosAutomaticamente(){
+async function carregarDados(){
 
- if(!usuarioFirebase)return;
+ if(!usuarioFirebase) return;
 
  try{
 
-  const snap=await get(
-   ref(db,"jogadores/"+usuarioFirebase.uid)
-  );
+   const snap=await get(
+     ref(db,"jogadores/"+usuarioFirebase.uid)
+   );
 
-  if(snap.exists()){
+   if(snap.exists()){
 
-   const d=snap.val();
+     const d=snap.val();
 
-   jogador.vida=Number(d.vida ?? 100);
-   jogador.mana=Number(d.mana ?? 100);
-   jogador.pontos=Number(d.pontos ?? 0);
-   jogador.moedas=Number(d.moedas ?? 100);
-   jogador.nivel=Number(d.nivel ?? 1);
-   jogador.arma=d.arma || "Espada de Ferro";
-   jogador.personagem=d.personagem || "Guerreiro";
-   nome=d.nome || "Jogador";
+     jogador={
+       ...jogador,
+       ...d
+     };
 
-   atualizarTela();
+     jogador.nome="Gabriel Cabral";
 
-  }
+   }else{
+
+     await salvarFirebase();
+
+   }
 
  }catch(e){
 
-  console.error(e);
+   console.error(e);
 
  }
 
 }
 
 
+/* ================= SALVAR BOTÃO ================= */
+
+window.salvarJogo=async function(){
+
+ localStorage.setItem(
+   "dragonWarSave",
+   JSON.stringify(jogador)
+ );
+
+ await salvarFirebase();
+
+ mensagem("💾 Jogo salvo!");
+
+};
+
+
+/* ================= CARREGAR BOTÃO ================= */
+
 window.carregarJogo=async function(){
 
- await carregarDadosAutomaticamente();
+ const salvo=localStorage.getItem("dragonWarSave");
 
- mensagem("📂 Dados carregados.");
+ if(salvo){
+
+   try{
+
+     jogador={
+       ...jogador,
+       ...JSON.parse(salvo)
+     };
+
+   }catch(e){}
+
+ }
+
+ await carregarDados();
+
+ atualizarTela();
+
+ mensagem("📂 Jogo carregado!");
 
 };
 
@@ -736,886 +938,380 @@ window.carregarJogo=async function(){
 
 window.novoJogo=function(){
 
- if(!confirm("Começar um novo jogo?"))return;
+ if(!confirm("Começar um novo jogo?")) return;
 
  jogador={
+  nome:"Gabriel Cabral",
   vida:100,
   mana:100,
   pontos:0,
-  moedas:100,
+  moedas:500,
   nivel:1,
+  personagem:"Guerreiro",
   arma:"Espada de Ferro",
-  personagem:"Guerreiro"
+  poder:"Nenhum",
+  inimigo:100
  };
+
+ localStorage.removeItem("dragonWarSave");
+
+ salvarFirebase();
 
  atualizarTela();
 
- mensagem("🔄 Novo jogo iniciado.");
+ mensagem("🆕 Novo jogo criado!");
 
 };
 
 
-/* ================= NOME ================= */
+/* ================= EDITAR NOME ================= */
 
 window.editarNome=function(){
 
- const novo=prompt("Digite seu nome:",nome);
+ const novo=prompt(
+   "Digite seu nome:",
+   jogador.nome
+ );
 
- if(!novo)return;
+ if(!novo || !novo.trim()) return;
 
- nome=novo.trim().substring(0,20)||"Jogador";
+ jogador.nome=novo.trim();
 
+ /*
+  * Para manter o nome especial do dono,
+  * o jogo continua salvando Gabriel Cabral
+  * como o nome público especial.
+  */
+
+ salvarFirebase();
+
+ mensagem("👤 Nome atualizado!");
+
+};
+
+
+/* ================= PERSONAGENS ================= */
+
+window.comprarPersonagem=function(nome,preco){
+
+ if(jogador.personagem===nome){
+
+   mensagem("Você já está usando este personagem.");
+   return;
+
+ }
+
+ if(preco>0 && jogador.moedas<preco){
+
+   mensagem("🪙 Moedas insuficientes!");
+   return;
+
+ }
+
+ if(preco>0){
+   jogador.moedas-=preco;
+ }
+
+ jogador.personagem=nome;
+
+ salvarFirebase();
  atualizarTela();
 
- salvarJogo();
-
-};
-
-
-/* ================= PERSONAGEM ================= */
-
-window.escolherPersonagem=function(){
-
- el("modalConteudo").innerHTML=`
-
- <h2>👤 Escolha seu personagem</h2>
-
- <div class="cards">
-
-  <div class="card">
-   <h3>⚔️ Guerreiro</h3>
-   <p>Mais vida e força física.</p>
-   <button class="btn-laranja"
-   onclick="selecionarPersonagem('Guerreiro')">
-   Escolher
-   </button>
-  </div>
-
-  <div class="card">
-   <h3>🧙 Mago</h3>
-   <p>Mais mana e poder mágico.</p>
-   <button class="btn-roxo"
-   onclick="selecionarPersonagem('Mago')">
-   Escolher
-   </button>
-  </div>
-
- </div>
- `;
-
- abrirModal();
-
-};
-
-
-window.selecionarPersonagem=function(tipo){
-
- jogador.personagem=tipo;
-
- if(tipo==="Mago"){
-  jogador.mana=Math.max(jogador.mana,150);
- }
-
- if(tipo==="Guerreiro"){
-  jogador.vida=Math.max(jogador.vida,120);
- }
-
- atualizarTela();
- fecharModal();
-
- mensagem("👤 Personagem escolhido: "+tipo);
-
-};
-
-
-/* ================= AVENTURA ================= */
-
-window.aventura=function(){
-
- const inimigos=[
-  ["Goblin",15,20],
-  ["Orc",25,30],
-  ["Cavaleiro Sombrio",40,55],
-  ["Dragão Jovem",60,90]
- ];
-
- const inimigo=
-  inimigos[Math.floor(Math.random()*inimigos.length)];
-
- const dano=inimigo[1];
- const recompensa=inimigo[2];
-
- jogador.vida-=Math.floor(Math.random()*dano)+5;
-
- if(jogador.vida<=0){
-
-  jogador.vida=50;
-
-  el("log").innerHTML=
-   "💀 Você foi derrotado, mas conseguiu escapar com vida.";
-
- }else{
-
-  jogador.pontos+=recompensa;
-  jogador.moedas+=Math.floor(recompensa/2);
-
-  if(jogador.pontos>=jogador.nivel*100){
-
-   jogador.nivel++;
-
-   jogador.vida+=30;
-   jogador.mana+=20;
-
-   mensagem("🎉 Você subiu para o nível "+jogador.nivel+"!");
-
-  }
-
-  el("log").innerHTML=
-   `⚔️ Você derrotou <b>${inimigo[0]}</b>!<br>
-    ⭐ +${recompensa} pontos<br>
-    🪙 +${Math.floor(recompensa/2)} moedas`;
-
- }
-
- atualizarTela();
-
- salvarJogo();
-
-};
-
-
-/* ================= DRAGÃO ================= */
-
-window.batalharDragao=function(){
-
- const dano=25+Math.floor(Math.random()*30);
-
- jogador.vida-=dano;
-
- if(jogador.vida<=0){
-
-  jogador.vida=30;
-
-  el("log").innerHTML=
-   "🐲 O Dragão venceu! Você conseguiu fugir.";
-
- }else{
-
-  jogador.pontos+=100;
-  jogador.moedas+=75;
-
-  el("log").innerHTML=
-   `🐲 Você enfrentou o Dragão!<br>
-    ⭐ +100 pontos<br>
-    🪙 +75 moedas`;
-
- }
-
- atualizarTela();
- salvarJogo();
-
-};
-
-
-/* ================= REI DEMÔNIO ================= */
-
-window.batalharReiDemonio=function(){
-
- if(jogador.nivel<5){
-
-  mensagem("🔒 Você precisa estar no nível 5.");
-
-  return;
-
- }
-
- const dano=45+Math.floor(Math.random()*40);
-
- jogador.vida-=dano;
-
- if(jogador.vida<=0){
-
-  jogador.vida=40;
-
-  el("log").innerHTML=
-   "👹 O Rei Demônio venceu a batalha!";
-
- }else{
-
-  jogador.pontos+=300;
-  jogador.moedas+=250;
-
-  el("log").innerHTML=
-   `👹 REI DEMÔNIO derrotado!<br>
-    ⭐ +300 pontos<br>
-    🪙 +250 moedas`;
-
- }
-
- atualizarTela();
- salvarJogo();
-
-};
-
-
-/* ================= LOJA ================= */
-
-window.abrirLoja=function(){
-
- el("modalConteudo").innerHTML=`
-
- <h2>🛒 Loja de Armas</h2>
-
- <div class="cards">
-
-  <div class="card">
-   <h3>🗡️ Espada de Aço</h3>
-   <p>Preço: 200 moedas</p>
-   <button onclick="comprarArma('Espada de Aço',200)">
-    Comprar
-   </button>
-  </div>
-
-  <div class="card">
-   <h3>⚔️ Lâmina Demoníaca</h3>
-   <p>Preço: 500 moedas</p>
-   <button class="btn-vermelho"
-   onclick="comprarArma('Lâmina Demoníaca',500)">
-    Comprar
-   </button>
-  </div>
-
-  <div class="card">
-   <h3>🐉 Espada do Dragão</h3>
-   <p>Preço: 1000 moedas</p>
-   <button class="btn-laranja"
-   onclick="comprarArma('Espada do Dragão',1000)">
-    Comprar
-   </button>
-  </div>
-
- </div>
- `;
-
- abrirModal();
-
-};
-
-
-window.comprarArma=function(arma,preco){
-
- if(jogador.moedas<preco){
-
-  mensagem("❌ Moedas insuficientes.");
-
-  return;
-
- }
-
- jogador.moedas-=preco;
- jogador.arma=arma;
-
- atualizarTela();
- salvarJogo();
-
- mensagem("🗡️ Arma comprada!");
+ mensagem("👤 "+nome+" adquirido!");
 
 };
 
 
 /* ================= PODERES ================= */
 
-window.abrirPoderes=function(){
+window.comprarPoder=function(nome,preco){
 
- el("modalConteudo").innerHTML=`
+ if(jogador.poder===nome){
 
- <h2>🔮 Poderes</h2>
-
- <div class="cards">
-
-  <div class="card">
-   <h3>❤️ Cura</h3>
-   <p>Recupera 40 de vida.</p>
-   <button class="btn-verde"
-   onclick="usarCura()">
-   Usar
-   </button>
-  </div>
-
-  <div class="card">
-   <h3>🔥 Explosão Mágica</h3>
-   <p>Gasta 30 mana e ganha 50 pontos.</p>
-   <button class="btn-roxo"
-   onclick="explosaoMagica()">
-   Usar
-   </button>
-  </div>
-
- </div>
- `;
-
- abrirModal();
-
-};
-
-
-window.usarCura=function(){
-
- jogador.vida=Math.min(100,jogador.vida+40);
-
- atualizarTela();
- salvarJogo();
-
- mensagem("❤️ Vida recuperada!");
-
-};
-
-
-window.explosaoMagica=function(){
-
- if(jogador.mana<30){
-
-  mensagem("🔵 Mana insuficiente.");
-
-  return;
+   mensagem("Você já possui esse poder.");
+   return;
 
  }
 
- jogador.mana-=30;
- jogador.pontos+=50;
+ if(jogador.moedas<preco){
+
+   mensagem("🪙 Moedas insuficientes!");
+   return;
+
+ }
+
+ jogador.moedas-=preco;
+ jogador.poder=nome;
+
+ salvarFirebase();
+ atualizarTela();
+
+ mensagem("🔥 Poder adquirido!");
+
+};
+
+
+/* ================= ARMAS ================= */
+
+window.comprarArma=function(nome,preco){
+
+ if(jogador.arma===nome){
+
+   mensagem("Você já possui essa arma.");
+   return;
+
+ }
+
+ if(jogador.moedas<preco){
+
+   mensagem("🪙 Moedas insuficientes!");
+   return;
+
+ }
+
+ jogador.moedas-=preco;
+ jogador.arma=nome;
+
+ salvarFirebase();
+ atualizarTela();
+
+ mensagem("⚔️ Arma adquirida!");
+
+};
+
+
+/* ================= COMBATE ================= */
+
+window.atacar=function(){
+
+ if(jogador.inimigo<=0){
+
+   mensagem("🐉 O inimigo já foi derrotado!");
+   return;
+
+ }
+
+ let dano=15+jogador.nivel*2;
+
+ if(jogador.arma==="Lâmina do Dragão"){
+   dano+=15;
+ }
+
+ jogador.inimigo-=dano;
+
+ let texto="⚔️ Você causou "+dano+" de dano!";
+
+ if(jogador.inimigo<=0){
+
+   jogador.inimigo=0;
+
+   const premio=100+jogador.nivel*25;
+
+   jogador.pontos+=50;
+   jogador.moedas+=premio;
+
+   jogador.nivel+=1;
+
+   texto+=" 🏆 Vitória! +50 pontos e +"+premio+" moedas.";
+
+   setTimeout(()=>{
+     jogador.inimigo=100;
+     atualizarTela();
+   },1200);
+
+ }
+
+ document.getElementById("resultadoCombate").textContent=texto;
 
  atualizarTela();
- salvarJogo();
 
- mensagem("🔥 Poder mágico usado!");
+ salvarFirebase();
+
+};
+
+
+/* ================= PODER EM COMBATE ================= */
+
+window.usarPoder=function(){
+
+ if(jogador.poder==="Nenhum"){
+
+   mensagem("🔥 Compre um poder na Loja primeiro!");
+   return;
+
+ }
+
+ if(jogador.mana<20){
+
+   mensagem("💧 Mana insuficiente!");
+   return;
+
+ }
+
+ let dano=35+jogador.nivel*3;
+
+ if(jogador.poder==="Raio Divino"){
+   dano+=15;
+ }
+
+ if(jogador.poder==="Explosão Cósmica"){
+   dano+=35;
+ }
+
+ jogador.mana-=20;
+ jogador.inimigo-=dano;
+
+ document.getElementById("resultadoCombate")
+ .textContent="🔥 Poder usado! Dano: "+dano;
+
+ if(jogador.inimigo<=0){
+
+   jogador.inimigo=0;
+   jogador.pontos+=100;
+   jogador.moedas+=200;
+   jogador.nivel+=1;
+
+   document.getElementById("resultadoCombate")
+   .textContent="🌟 PODER LENDÁRIO! Inimigo derrotado!";
+
+   setTimeout(()=>{
+     jogador.inimigo=100;
+     atualizarTela();
+   },1200);
+
+ }
+
+ atualizarTela();
+ salvarFirebase();
 
 };
 
 
 /* ================= RANKING ================= */
 
-window.abrirRanking=async function(){
+async function carregarRanking(){
 
- el("modalConteudo").innerHTML=
- "<h2>🏆 Ranking Global</h2><p>🔄 Carregando...</p>";
+ const lista=document.getElementById("rankingLista");
 
- abrirModal();
+ if(!lista) return;
 
- try{
-
-  const snap=await get(
-   query(
-    ref(db,"ranking"),
-    orderByChild("pontos"),
-    limitToLast(100)
-   )
-  );
-
-  if(!snap.exists()){
-
-   el("modalConteudo").innerHTML=
-    "<h2>🏆 Ranking Global</h2><p>Nenhum jogador encontrado.</p>";
-
-   return;
-
-  }
-
-  const lista=[];
-
-  snap.forEach(c=>{
-   lista.push({
-    uid:c.key,
-    ...(c.val()||{})
-   });
-  });
-
-  lista.sort((a,b)=>
-   Number(b.pontos||0)-Number(a.pontos||0)
-  );
-
-  let html="<h2>🏆 Ranking Global</h2>";
-
-  lista.forEach((p,i)=>{
-
-   html+=`
-
-   <div class="ranking-item">
-
-    <span>
-     <b>#${i+1}</b>
-     ${escapeHTML(p.nome||"Jogador")}
-    </span>
-
-    <span>
-     ⭐ ${Number(p.pontos||0)}
-     · Nv. ${Number(p.nivel||1)}
-    </span>
-
-   </div>
-
-   `;
-
-  });
-
-  el("modalConteudo").innerHTML=html;
-
- }catch(e){
-
-  console.error(e);
-
-  el("modalConteudo").innerHTML=
-   "<h2>🏆 Ranking</h2><p>❌ Erro ao carregar ranking.</p>";
-
- }
-
-};
-
-
-/* ================= ADMIN ================= */
-
-window.abrirAdmin=function(){
-
- if(!ehAdmin()){
-
-  mensagem("❌ Acesso administrativo negado.");
-
-  return;
-
- }
-
- el("modalConteudo").innerHTML=`
-
- <h2>🛡️ Painel Administrativo</h2>
-
- <p class="pequeno">
- Administrador autenticado.
- </p>
-
- <input id="buscaAdmin"
- placeholder="🔎 Buscar por nome ou UID"
- oninput="filtrarAdmin()">
-
- <div id="listaAdmin">
-  🔄 Carregando jogadores...
- </div>
-
- `;
-
- abrirModal();
-
- carregarJogadoresAdmin();
-
-};
-
-
-/* ================= CARREGAR JOGADORES ADM ================= */
-
-async function carregarJogadoresAdmin(){
-
- if(!ehAdmin())return;
-
- const lista=el("listaAdmin");
-
- lista.innerHTML="🔄 Carregando jogadores...";
+ lista.innerHTML="🔄 Carregando ranking...";
 
  try{
 
-  const jogadoresSnap=
-   await get(ref(db,"jogadores"));
+   const snap=await get(ref(db,"ranking"));
 
-  const rankingSnap=
-   await get(ref(db,"ranking"));
+   if(!snap.exists()){
 
-  const mapa=new Map();
+     lista.innerHTML="<p>Nenhum jogador ainda.</p>";
+     return;
 
+   }
 
-  if(jogadoresSnap.exists()){
+   const jogadores=[];
 
-   jogadoresSnap.forEach(c=>{
+   snap.forEach(c=>{
 
-    mapa.set(c.key,{
-     uid:c.key,
-     ...(c.val()||{})
-    });
+     const d=c.val()||{};
 
-   });
-
-  }
-
-
-  if(rankingSnap.exists()){
-
-   rankingSnap.forEach(c=>{
-
-    const atual=mapa.get(c.key)||{
-     uid:c.key
-    };
-
-    mapa.set(c.key,{
-     ...atual,
-     ...(c.val()||{})
-    });
+     jogadores.push({
+       uid:c.key,
+       ...d
+     });
 
    });
 
-  }
-
-
-  const jogadores=Array.from(mapa.values());
-
-
-  if(!jogadores.length){
-
-   lista.innerHTML=
-    "<p>Nenhum jogador encontrado.</p>";
-
-   return;
-
-  }
-
-
-  jogadores.sort((a,b)=>
-   Number(b.pontos||0)-Number(a.pontos||0)
-  );
-
-
-  lista.innerHTML="";
-
-  jogadores.forEach(j=>{
-
-   lista.appendChild(
-    criarCardAdmin(j.uid,j)
+   jogadores.sort(
+     (a,b)=>(Number(b.pontos)||0)-(Number(a.pontos)||0)
    );
 
-  });
+   lista.innerHTML="";
 
+   jogadores.slice(0,100).forEach((j,index)=>{
+
+     const div=document.createElement("div");
+     div.className="rank";
+
+     const pos=document.createElement("div");
+     pos.className="pos";
+     pos.textContent="#"+(index+1);
+
+     const nome=document.createElement("div");
+
+     /*
+      * SOMENTE jogadores marcados como nomeColorido
+      * aparecem com efeito especial.
+      */
+
+     if(j.nomeColorido===true){
+
+       nome.className="nome-dono";
+
+     }else{
+
+       nome.className="nome-normal";
+
+     }
+
+     nome.textContent=j.nome||"Jogador";
+
+     const pontos=document.createElement("div");
+     pontos.className="rank-pontos";
+     pontos.textContent=(Number(j.pontos)||0)+" ⭐";
+
+     div.appendChild(pos);
+     div.appendChild(nome);
+     div.appendChild(pontos);
+
+     lista.appendChild(div);
+
+   });
 
  }catch(e){
 
-  console.error(e);
+   console.error(e);
 
-  lista.innerHTML=
-   `<p>❌ Erro ao carregar jogadores.<br>
-   ${escapeHTML(e.message||"Erro")}</p>`;
+   lista.innerHTML=
+   "❌ Não foi possível carregar o ranking.";
 
  }
 
 }
 
 
-/* ================= CARD ADM ================= */
-
-function criarCardAdmin(uid,dados){
-
- const div=document.createElement("div");
-
- div.className="card admin-card";
-
- div.dataset.busca=
-  (
-   (dados.nome||"")+
-   " "+
-   uid
-  ).toLowerCase();
-
-
- div.innerHTML=`
-
- <h3>👤 ${escapeHTML(dados.nome||"Jogador")}</h3>
-
- <p class="pequeno">
- UID: ${escapeHTML(uid)}
- </p>
-
- <p>
- ⭐ Pontos:
- <b>${Number(dados.pontos||0)}</b>
- </p>
-
- <p>
- 🪙 Moedas:
- <b>${Number(dados.moedas||0)}</b>
- </p>
-
- <p>
- 📈 Nível:
- <b>${Number(dados.nivel||1)}</b>
- </p>
-
- <p>
- 👤 ${escapeHTML(dados.personagem||"Guerreiro")}
- </p>
-
- <button class="btn-azul"
- onclick="verJogador('${uid}')">
- 👁️ Ver
- </button>
-
- <button class="btn-laranja"
- onclick="editarJogador('${uid}')">
- ✏️ Editar
- </button>
-
- <button class="btn-vermelho"
- onclick="removerJogador('${uid}')">
- 🗑️ Remover
- </button>
-
- `;
-
- return div;
-
-}
-
-
-/* ================= FILTRO ADM ================= */
-
-window.filtrarAdmin=function(){
-
- const busca=
-  (el("buscaAdmin")?.value||"")
-  .toLowerCase();
-
- document
-  .querySelectorAll(".admin-card")
-  .forEach(card=>{
-
-   card.style.display=
-    card.dataset.busca.includes(busca)
-     ?"block"
-     :"none";
-
-  });
-
-};
-
-
-/* ================= VER JOGADOR ================= */
-
-window.verJogador=async function(uid){
-
- try{
-
-  const snap=
-   await get(ref(db,"jogadores/"+uid));
-
-  const dados=snap.exists()
-   ?snap.val()
-   :{};
-
-  el("modalConteudo").innerHTML=`
-
-  <h2>👁️ Dados do jogador</h2>
-
-  <p><b>Nome:</b> ${escapeHTML(dados.nome||"Jogador")}</p>
-
-  <p><b>UID:</b> ${escapeHTML(uid)}</p>
-
-  <p><b>Vida:</b> ${Number(dados.vida||0)}</p>
-
-  <p><b>Mana:</b> ${Number(dados.mana||0)}</p>
-
-  <p><b>Pontos:</b> ${Number(dados.pontos||0)}</p>
-
-  <p><b>Moedas:</b> ${Number(dados.moedas||0)}</p>
-
-  <p><b>Nível:</b> ${Number(dados.nivel||1)}</p>
-
-  <p><b>Arma:</b> ${escapeHTML(dados.arma||"")}</p>
-
-  <p><b>Personagem:</b> ${escapeHTML(dados.personagem||"")}</p>
-
-  <button class="btn-laranja"
-  onclick="abrirAdmin()">
-  ↩ Voltar
-  </button>
-
-  `;
-
- }catch(e){
-
-  mensagem("❌ Erro ao visualizar jogador.");
-
- }
-
-};
-
-
-/* ================= EDITAR JOGADOR ================= */
-
-window.editarJogador=async function(uid){
-
- const snap=
-  await get(ref(db,"jogadores/"+uid));
-
- const d=snap.exists()?snap.val():{};
-
-
- el("modalConteudo").innerHTML=`
-
- <h2>✏️ Editar jogador</h2>
-
- <p class="pequeno">
- UID: ${escapeHTML(uid)}
- </p>
-
- <label>Pontos</label>
- <input id="admPontos"
- type="number"
- value="${Number(d.pontos||0)}">
-
- <label>Moedas</label>
- <input id="admMoedas"
- type="number"
- value="${Number(d.moedas||0)}">
-
- <label>Nível</label>
- <input id="admNivel"
- type="number"
- value="${Number(d.nivel||1)}">
-
- <button class="btn-verde"
- onclick="salvarEdicaoJogador('${uid}')">
- 💾 Salvar alterações
- </button>
-
- `;
-
-};
-
-
-window.salvarEdicaoJogador=async function(uid){
-
- if(!ehAdmin())return;
-
- const pontos=
-  Number(el("admPontos").value||0);
-
- const moedas=
-  Number(el("admMoedas").value||0);
-
- const nivel=
-  Number(el("admNivel").value||1);
-
-
- try{
-
-  await update(
-   ref(db,"jogadores/"+uid),
-   {
-    pontos:pontos,
-    moedas:moedas,
-    nivel:nivel,
-    atualizadoEm:Date.now()
+/* ================= RANKING EM TEMPO REAL ================= */
+
+onValue(
+ ref(db,"ranking"),
+ ()=>{
+   const tela=document.getElementById("ranking");
+
+   if(tela && tela.classList.contains("ativa")){
+     carregarRanking();
    }
-  );
-
-
-  await update(
-   ref(db,"ranking/"+uid),
-   {
-    pontos:pontos,
-    nivel:nivel,
-    atualizadoEm:Date.now()
-   }
-  );
-
-
-  mensagem("✅ Jogador atualizado.");
-
-  abrirAdmin();
-
-
- }catch(e){
-
-  console.error(e);
-
-  mensagem("❌ Erro ao atualizar.");
-
  }
-
-};
-
-
-/* ================= REMOVER ================= */
-
-window.removerJogador=async function(uid){
-
- if(!ehAdmin())return;
-
- if(uid===usuarioFirebase.uid){
-
-  mensagem("❌ Você não pode remover sua própria conta.");
-
-  return;
-
- }
-
- if(!confirm("Remover este jogador?"))return;
+);
 
 
- try{
+/* ================= SERVICE WORKER ================= */
 
-  await remove(ref(db,"jogadores/"+uid));
-  await remove(ref(db,"ranking/"+uid));
+if("serviceWorker" in navigator){
 
-  mensagem("🗑️ Jogador removido.");
+ window.addEventListener("load",()=>{
 
-  carregarJogadoresAdmin();
+   navigator.serviceWorker
+   .register("./sw.js")
+   .catch(e=>console.log("SW:",e));
 
- }catch(e){
-
-  console.error(e);
-
-  mensagem("❌ Erro ao remover.");
-
- }
-
-};
-
-
-/* ================= MODAL ================= */
-
-function abrirModal(){
-
- el("modal").classList.remove("oculto");
-
-}
-
-function fecharModal(){
-
- el("modal").classList.add("oculto");
-
-}
-
-window.abrirModal=abrirModal;
-window.fecharModal=fecharModal;
-
-
-/* ================= SEGURANÇA HTML ================= */
-
-function escapeHTML(text){
-
- return String(text)
-  .replaceAll("&","&amp;")
-  .replaceAll("<","&lt;")
-  .replaceAll(">","&gt;")
-  .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;");
+ });
 
 }
 
 
-/* ================= EXPOR ================= */
+/* ================= INÍCIO ================= */
 
-window.atualizarTela=atualizarTela;
+atualizarTela();
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .catch(erro => console.error("Service Worker:", erro));
-  });
-}
 </script>
 
 </body>

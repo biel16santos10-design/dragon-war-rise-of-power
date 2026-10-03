@@ -81,7 +81,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .boss.fire .boss-art{background:radial-gradient(circle,#6c2d13,#100b0a 70%)}.boss.shadow .boss-art{background:radial-gradient(circle,#472565,#080a15 70%)}
 .boss-body{padding:13px}.boss h3{margin:0;color:#d9f4ff}.boss.fire h3{color:#ffb76b}.boss.shadow h3{color:#dc9cff}.stats{color:#9fb2c8;font-size:13px;line-height:1.7}.reward{color:#ffd46c;font-size:13px}.fight{width:100%;margin-top:9px;border:1px solid #ff9d45;background:linear-gradient(180deg,#ff9a3b,#9c381b);border-radius:9px;padding:11px;font-weight:900}
 
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{padding:9px 14px;border-radius:9px;border:1px solid #36516b;background:#091729}.tab.active{border-color:#ffd15b;color:#ffd15b}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.skin-card{border-color:#7544b4;background:linear-gradient(180deg,#1b1230,#0a1020)}
+.skin-card.equipped{border-color:#ffd15b;box-shadow:0 0 20px #ffb52e44}
+.skin-ability{color:#8eeaff;font-size:12px;line-height:1.5}
+.equip{margin-top:9px;border:1px solid #6fdfff;background:linear-gradient(180deg,#147ba0,#073451);border-radius:8px;padding:8px;width:100%;font-weight:900}.tab{padding:9px 14px;border-radius:9px;border:1px solid #36516b;background:#091729}.tab.active{border-color:#ffd15b;color:#ffd15b}
 .shop-layout{display:grid;grid-template-columns:260px 1fr;gap:15px}.merchant{min-height:610px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:
  linear-gradient(180deg,#09182a88,#09111ceF),radial-gradient(circle at 50% 40%,#35526a,#0b1220 70%);border:1px solid #304d68;border-radius:14px;padding:15px}
 .shop-person{font-size:170px;filter:drop-shadow(0 0 22px #6be6ff)}.merchant p{text-align:center;color:#b7c8db}.item{position:relative;min-height:175px}.rarity{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#75dcff}.item h3{font-size:14px;margin:8px 0}.item .emoji{font-size:42px}.price{color:#ffd55f;font-weight:900;margin:8px 0}.buy{border:1px solid #4bdb7f;background:linear-gradient(180deg,#27a95e,#116c3d);border-radius:8px;padding:8px 14px;font-weight:900;width:100%}
@@ -176,12 +180,17 @@ button{font:inherit;color:inherit;cursor:pointer}
 <section id="loja" class="screen">
  <h1 class="section-title">🛒 LOJA DE ITENS</h1>
  <div class="tabs">
-  <button class="tab active">EQUIPAMENTOS</button><button class="tab">CONSUMÍVEIS</button><button class="tab">MATERIAIS</button><button class="tab">GEMAS</button>
+  <button class="tab active" onclick="setShopCategory('equipamentos',this)">EQUIPAMENTOS</button>
+  <button class="tab" onclick="setShopCategory('consumiveis',this)">CONSUMÍVEIS</button>
+  <button class="tab" onclick="setShopCategory('materiais',this)">MATERIAIS</button>
+  <button class="tab" onclick="setShopCategory('gemas',this)">GEMAS</button>
  </div>
  <div class="shop-layout">
   <div class="merchant"><div class="shop-person">🧝‍♀️</div><h2>Mercadora</h2><p>Equipamentos, armas, poderes e skins para sua jornada.</p></div>
   <div class="grid4" id="shopGrid"></div>
  </div>
+ <h2 style="color:#ffd47b;text-align:center;margin-top:22px">🎭 SKINS E HABILIDADES</h2>
+ <div class="grid4" id="skinShopGrid"></div>
 </section>
 
 <section id="poderes" class="screen">
@@ -199,7 +208,8 @@ button{font:inherit;color:inherit;cursor:pointer}
  <h1 class="section-title">🔥 COMBATE</h1>
  <div class="combat">
   <div class="arena"><div class="enemy" id="battleEnemy">🐲</div><div class="player">⚔️</div></div>
-  <div class="panel combat-ui"><div class="phase" id="battlePhase">FASE 1/3</div><h2 id="battleName">KHALDRON</h2><div class="hpbig"><i id="enemyHp"></i></div><p>HP: <b id="enemyHpText">100</b></p><hr>
+  <div class="panel combat-ui"><div class="phase" id="battlePhase">FASE 1/3</div><h2 id="battleName">KHALDRON</h2>
+ <div id="battleReward" style="color:#ffd46c;margin-bottom:8px">RECOMPENSA: 🪙 80 • 💎 1</div><div class="hpbig"><i id="enemyHp"></i></div><p>HP: <b id="enemyHpText">100</b></p><hr>
    <p>Seu HP: <b id="playerHpText">100</b></p>
    <div class="actions"><button onclick="attack()">⚔️ ATACAR</button><button class="power" onclick="usePower()">🔥 PODER</button><button onclick="heal()">💚 CURAR</button><button onclick="openScreen('jogar')">🚪 SAIR</button></div>
   </div>
@@ -207,7 +217,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 </section>
 
 <section id="inventario" class="screen">
- <h1 class="section-title">🎒 INVENTÁRIO</h1><div class="grid4" id="inventoryGrid"></div>
+ <h1 class="section-title">🎒 INVENTÁRIO</h1>
+ <div class="panel" style="margin-bottom:15px;text-align:center">
+  <h2 style="color:#ffd47b">🎭 SKIN EQUIPADA</h2>
+  <div id="equippedSkin" style="font-size:60px">⚔️</div>
+  <div id="equippedSkinName" style="font-weight:900">Guerreiro</div>
+  <div id="equippedSkinAbility" style="color:#8eeaff;margin-top:5px">Habilidade: Golpe de Guerra</div>
+ </div>
+ <div class="grid4" id="inventoryGrid"></div>
 </section>
 
 <section id="ranking" class="screen">
@@ -246,24 +263,33 @@ const enemies=[
  {name:"MALAKAI, O GUERREIRO DAS SOMBRAS",emoji:"🧙",hp:500,dmg:30,reward:500,points:300}
 ];
 const shop=[
- {name:"Lâmina do Dragão Celestial",emoji:"🗡️",price:750,currency:"gem",type:"Arma"},
- {name:"Armadura do Rei Dragão",emoji:"🛡️",price:1200,currency:"coin",type:"Armadura"},
- {name:"Elixir do Poder Ancestral",emoji:"🧪",price:45000,currency:"coin",type:"Consumível"},
- {name:"Escudo da Guarda Real",emoji:"🛡️",price:350,currency:"gem",type:"Escudo"},
- {name:"Amuleto do Caos",emoji:"📿",price:20000,currency:"coin",type:"Raro"},
- {name:"Poção de Cura Superior",emoji:"🧪",price:2500,currency:"coin",type:"Poção"},
- {name:"Manto das Sombras",emoji:"🧥",price:150,currency:"gem",type:"Raro"},
- {name:"Lâmina Rúnica de Fogo",emoji:"⚔️",price:55000,currency:"coin",type:"Raro"},
- {name:"Pergaminho de Invocação",emoji:"📜",price:250,currency:"gem",type:"Épico"},
- {name:"Cocar de Dragão",emoji:"👑",price:850000,currency:"coin",type:"Épico"},
- {name:"Poção de Mana Rápida",emoji:"🔵",price:1800,currency:"coin",type:"Consumível"},
- {name:"Botas do Viajante",emoji:"🥾",price:110,currency:"gem",type:"Raro"}
+ {name:"Lâmina do Dragão Celestial",emoji:"🗡️",price:750,currency:"gem",type:"Arma",category:"equipamentos"},
+ {name:"Armadura do Rei Dragão",emoji:"🛡️",price:1200,currency:"coin",type:"Armadura",category:"equipamentos"},
+ {name:"Escudo da Guarda Real",emoji:"🛡️",price:350,currency:"gem",type:"Escudo",category:"equipamentos"},
+ {name:"Manto das Sombras",emoji:"🧥",price:150,currency:"gem",type:"Raro",category:"equipamentos"},
+ {name:"Poção de Cura Superior",emoji:"🧪",price:2500,currency:"coin",type:"Poção",category:"consumiveis"},
+ {name:"Poção de Mana Rápida",emoji:"🔵",price:1800,currency:"coin",type:"Consumível",category:"consumiveis"},
+ {name:"Elixir do Poder Ancestral",emoji:"🧪",price:45000,currency:"coin",type:"Elixir",category:"consumiveis"},
+ {name:"Amuleto do Caos",emoji:"📿",price:20000,currency:"coin",type:"Raro",category:"materiais"},
+ {name:"Pergaminho de Invocação",emoji:"📜",price:250,currency:"gem",type:"Material",category:"materiais"},
+ {name:"Cocar de Dragão",emoji:"👑",price:850000,currency:"coin",type:"Material",category:"materiais"},
+ {name:"Lâmina Rúnica de Fogo",emoji:"⚔️",price:55000,currency:"coin",type:"Material",category:"materiais"},
+ {name:"Botas do Viajante",emoji:"🥾",price:110,currency:"gem",type:"Material",category:"materiais"},
+ {name:"Pacote de 10 Gemas",emoji:"💎",price:1000,currency:"coin",type:"Gemas",category:"gemas",gemReward:10},
+ {name:"Pacote de 25 Gemas",emoji:"💎",price:2500,currency:"coin",type:"Gemas",category:"gemas",gemReward:25},
+ {name:"Pacote de 60 Gemas",emoji:"💎",price:6000,currency:"coin",type:"Gemas",category:"gemas",gemReward:60}
+];
+const skins=[
+ {id:"guerreiro",name:"Guerreiro",emoji:"⚔️",price:0,currency:"coin",ability:"Golpe de Guerra: +5 de dano"},
+ {id:"lua",name:"Lua Azul",emoji:"🌙",price:5,currency:"gem",ability:"Aura Lunar: +10 de dano nos poderes"},
+ {id:"dragao",name:"Dragão Sombrio",emoji:"🐉",price:10,currency:"gem",ability:"Poder Sombrio: +15 de dano no combate"},
+ {id:"fogo",name:"Guardião de Fogo",emoji:"🔥",price:8,currency:"gem",ability:"Chama Ardente: +10% de recompensa em moedas"}
 ];
 const skills=[
  ["🔥","Sopro de Fogo",35],["⚡","Golpe de Raio",50],["❄️","Nova de Gelo",60],["🌀","Torrente do Vazio",80],
  ["⚔️","Corte",20],["🗡️","Golpe Duplo",45],["🛡️","Aparar",0],["🐍","Golpe Serpente",70]
 ];
-let state={name:"Gabriel Cabral",level:1,rank:"Iniciante",coins:1000,gems:20,energy:100,points:0,skillPoints:5,inventory:[],music:true,phase:0};
+let state={name:"Gabriel Cabral",level:1,rank:"Iniciante",coins:1000,gems:20,energy:100,points:0,skillPoints:5,inventory:[],skinsOwned:["guerreiro"],equippedSkin:"guerreiro",music:true,phase:0};
 let battle=null;
 
 function $(id){return document.getElementById(id)}
@@ -292,17 +318,61 @@ function updateUI(){
  $("myRankPoints").textContent=fmt(state.points)+" pontos";
  $("nameInput").value=state.name;
 }
+let shopCategory="equipamentos";
+function setShopCategory(category,btn){
+ shopCategory=category;
+ document.querySelectorAll(".tabs .tab").forEach(x=>x.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ renderShop();
+}
 function renderShop(){
- $("shopGrid").innerHTML=shop.map((it,i)=>`<div class="panel item"><div class="emoji">${it.emoji}</div><div class="rarity">${it.type}</div><h3>${it.name}</h3><div class="price">${it.currency==="gem"?"💎":"🪙"} ${fmt(it.price)}</div><button class="buy" onclick="buyItem(${i})">COMPRAR</button></div>`).join("");
+ const items=shop.filter(it=>it.category===shopCategory);
+ $("shopGrid").innerHTML=items.map(it=>{
+   const i=shop.indexOf(it);
+   return `<div class="panel item"><div class="emoji">${it.emoji}</div><div class="rarity">${it.type}</div><h3>${it.name}</h3><div class="price">${it.currency==="gem"?"💎":"🪙"} ${fmt(it.price)}</div>${it.gemReward?`<div class="stats">Receba 💎 ${it.gemReward} gemas</div>`:""}<button class="buy" onclick="buyItem(${i})">${it.gemReward?"COMPRAR GEMAS":"COMPRAR"}</button></div>`;
+ }).join("");
+ if(!items.length)$("shopGrid").innerHTML='<div class="panel"><h2>Nenhum item nesta categoria.</h2></div>';
+ $("skinShopGrid").innerHTML=skins.map(sk=>{
+   const owned=state.skinsOwned.includes(sk.id);
+   const action=owned?`equipSkin('${sk.id}')`:`buySkin('${sk.id}')`;
+   const label=owned?(state.equippedSkin===sk.id?"EQUIPADA":"EQUIPAR"):"COMPRAR";
+   return `<div class="panel item skin-card ${state.equippedSkin===sk.id?"equipped":""}"><div class="emoji">${sk.emoji}</div><div class="rarity">SKIN</div><h3>${sk.name}</h3><div class="skin-ability">✨ ${sk.ability}</div><div class="price">${owned?"✓ POSSUÍDA":(sk.currency==="gem"?"💎":"🪙")+" "+fmt(sk.price)}</div><button class="equip" onclick="${action}">${label}</button></div>`;
+ }).join("");
 }
 function renderInventory(){
- const arr=state.inventory.length?state.inventory:[{name:"Espada Inicial",emoji:"⚔️"},{name:"Poção Pequena",emoji:"🧪"}];
- $("inventoryGrid").innerHTML=arr.map(x=>`<div class="panel"><div style="font-size:55px">${x.emoji}</div><h3>${x.name}</h3><span class="rarity">ITEM DO JOGADOR</span></div>`).join("");
+ const skin=skins.find(x=>x.id===state.equippedSkin)||skins[0];
+ $("equippedSkin").textContent=skin.emoji;
+ $("equippedSkinName").textContent=skin.name;
+ $("equippedSkinAbility").textContent="Habilidade: "+skin.ability;
+ const items=state.inventory.length?state.inventory:[{name:"Espada Inicial",emoji:"⚔️"}];
+ const skinCards=skins.filter(sk=>state.skinsOwned.includes(sk.id)).map(sk=>{
+   const equipped=state.equippedSkin===sk.id;
+   return `<div class="panel item skin-card ${equipped?"equipped":""}"><div class="emoji">${sk.emoji}</div><div class="rarity">SKIN</div><h3>${sk.name}</h3><div class="skin-ability">✨ ${sk.ability}</div><button class="equip" onclick="equipSkin('${sk.id}')">${equipped?"✓ EQUIPADA":"EQUIPAR"}</button></div>`;
+ }).join("");
+ const itemCards=items.map(x=>`<div class="panel"><div style="font-size:55px">${x.emoji}</div><h3>${x.name}</h3><span class="rarity">ITEM DO JOGADOR</span></div>`).join("");
+ $("inventoryGrid").innerHTML=skinCards+itemCards;
+}
+function equipSkin(id){
+ if(!state.skinsOwned.includes(id))return showToast("Você ainda não possui essa skin.");
+ state.equippedSkin=id;renderInventory();renderShop();saveGame(false);
+ showToast("🎭 Skin equipada: "+skins.find(x=>x.id===id).name);
+}
+function buySkin(id){
+ const sk=skins.find(x=>x.id===id);
+ if(!sk)return;
+ if(state.skinsOwned.includes(id))return equipSkin(id);
+ if(state[sk.currency==="gem"?"gems":"coins"]<sk.price)return showToast("Você não tem recursos suficientes.");
+ if(sk.currency==="gem")state.gems-=sk.price;else state.coins-=sk.price;
+ state.skinsOwned.push(id);state.equippedSkin=id;updateUI();renderInventory();renderShop();saveGame(false);
+ showToast("🎭 Skin adquirida: "+sk.name);
 }
 function buyItem(i){
  const it=shop[i], key=it.currency==="gem"?"gems":"coins";
  if(state[key]<it.price)return showToast("Você não tem recursos suficientes.");
- state[key]-=it.price;state.inventory.push({name:it.name,emoji:it.emoji});updateUI();renderInventory();saveGame(false);showToast("Comprado: "+it.name);
+ state[key]-=it.price;
+ if(it.gemReward){state.gems+=it.gemReward;showToast("💎 Você recebeu "+it.gemReward+" gemas!");}
+ else{state.inventory.push({name:it.name,emoji:it.emoji});showToast("Comprado: "+it.name);}
+ updateUI();renderInventory();saveGame(false);
 }
 function renderSkills(){
  $("skillNodes").innerHTML=skills.map((s,i)=>`<div class="node ${i>4?"lock":""}" onclick="selectSkill(${i})">${s[0]}<small>${s[1]}</small></div>`).join("");
@@ -314,17 +384,31 @@ function upgradeSkill(){
 }
 function startBattle(i){
  battle={index:i,hp:enemies[i].hp,max:enemies[i].hp,playerHp:100};
- $("battleEnemy").textContent=enemies[i].emoji;$("battleName").textContent=enemies[i].name;$("battlePhase").textContent="FASE "+(i+1)+"/3";
+ $("battleEnemy").textContent=enemies[i].emoji;
+ $("battleName").textContent=enemies[i].name;
+ $("battlePhase").textContent="FASE "+(i+1)+"/3";
+ $("battleReward").textContent="RECOMPENSA: 🪙 "+fmt(enemies[i].reward)+" • 💎 "+enemies[i].gems;
  updateBattle();openScreen("combate");
 }
 function updateBattle(){if(!battle)return;$("enemyHpText").textContent=Math.max(0,battle.hp);$("enemyHp").style.width=Math.max(0,battle.hp/battle.max*100)+"%";$("playerHpText").textContent=battle.playerHp}
 function enemyTurn(){if(!battle)return;battle.playerHp=Math.max(0,battle.playerHp-enemies[battle.index].dmg);if(battle.playerHp<=0){showToast("Você foi derrotado. Tente novamente!");battle=null;openScreen("jogar")}updateBattle()}
 function attack(){if(!battle)return;let dmg=25+state.level*3;battle.hp-=dmg;if(battle.hp<=0)return winBattle();enemyTurn()}
 function usePower(){if(!battle)return;if(state.energy<15)return showToast("Energia insuficiente.");state.energy-=15;let dmg=50+state.level*5;battle.hp-=dmg;if(battle.hp<=0)return winBattle();enemyTurn();updateUI()}
-function heal(){if(!battle)return;state.energy=Math.min(100,state.energy+10);battle.playerHp=Math.min(100,battle.playerHp+25);enemyTurn();updateUI()}
+function heal(){
+ if(!battle)return;
+ if(battle.playerHp>=100)return showToast("Sua vida já está cheia.");
+ if(state.energy<5)return showToast("Energia insuficiente para curar.");
+ state.energy-=5;
+ const before=battle.playerHp;
+ battle.playerHp=Math.min(100,battle.playerHp+35);
+ updateBattle();updateUI();
+ showToast("💚 Curou +"+(battle.playerHp-before)+" de vida!");
+}
 function winBattle(){
- const e=enemies[battle.index];state.coins+=e.reward;state.points+=e.points;
- if(battle.index===1)state.gems+=1;if(battle.index===2)state.gems+=3;
+ const e=enemies[battle.index];
+ state.coins+=e.reward;
+ state.gems+=e.gems;
+ state.points+=e.points;
  state.level=Math.max(state.level,Math.floor(state.points/100)+1);state.skillPoints+=1;
  const next=battle.index+1;battle=null;updateRank();
  if(next<3){showToast("Vitória! Próxima fase liberada.");setTimeout(()=>startBattle(next),700)}
@@ -362,11 +446,16 @@ function saveGame(notify=true){
 function loadGame(){
  const raw=localStorage.getItem("dragonWarSave");
  if(!raw)return showToast("Nenhum jogo salvo neste aparelho.");
- try{state={...state,...JSON.parse(raw)};updateUI();showToast("Jogo carregado!")}catch(e){showToast("Não foi possível carregar.")}
+ try{
+ state={...state,...JSON.parse(raw)};
+ if(!Array.isArray(state.skinsOwned)||!state.skinsOwned.length)state.skinsOwned=["guerreiro"];
+ if(!state.equippedSkin)state.equippedSkin="guerreiro";
+ updateUI();renderInventory();renderShop();showToast("Jogo carregado!");
+}catch(e){showToast("Não foi possível carregar.")}
 }
 function newGame(){
  if(!confirm("Começar um novo jogo? Seu progresso local será reiniciado."))return;
- state={name:state.name,level:1,rank:"Iniciante",coins:1000,gems:20,energy:100,points:0,skillPoints:5,inventory:[],music:true,phase:0};
+ state={name:state.name,level:1,rank:"Iniciante",coins:1000,gems:20,energy:100,points:0,skillPoints:5,inventory:[],skinsOwned:["guerreiro"],equippedSkin:"guerreiro",music:true,phase:0};
  saveGame(false);updateUI();showToast("Novo jogo criado!");
 }
 function dailyReward(){
@@ -377,7 +466,11 @@ function dailyReward(){
  const roll=Math.floor(Math.random()*3);
  if(roll===0){state.coins+=500;showToast("🎁 Você ganhou 500 moedas!")}
  else if(roll===1){state.gems+=3;showToast("💎 Você ganhou 3 gemas!")}
- else{state.inventory.push({name:"Skin Dragão Sombrio",emoji:"🐉"});showToast("🐉 Você ganhou uma skin nova!")}
+ else{
+ if(!state.skinsOwned.includes("dragao"))state.skinsOwned.push("dragao");
+ state.equippedSkin="dragao";
+ showToast("🐉 Você ganhou a Skin Dragão Sombrio!");
+}
  updateUI();saveGame(false);renderInventory();
 }
 function toggleMusic(){
